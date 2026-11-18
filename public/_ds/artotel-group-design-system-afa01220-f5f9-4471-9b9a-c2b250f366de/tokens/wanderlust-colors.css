@@ -1,0 +1,20 @@
+/* Artotel Wanderlust (the group loyalty programme) — Brand Guidelines p.89.
+   Shares Artotel Group Red as its primary, then adds five secondary colours. */
+:root{
+  --wl-red:#ff005a;            /* "Rad to Red"          — shared primary */
+  --wl-fuchsia:#ff57c9;        /* "Starlight Fuchsia"   — RGB 255/87/201 */
+  --wl-indigo:#001780;         /* "Bright Indigo"       — RGB 0/23/128 */
+  --wl-blanket-blue:#ccdafc;   /* "Blanket Blue"        — RGB 205/218/252 */
+  --wl-red-wine:#890058;       /* "Red Wine"            — RGB 137/0/72 */
+  --wl-pillow-white:#fff2e9;   /* "Pillow White"        — RGB 255/242/233 */
+  --wl-jet-black:#000000;      /* "Jet Black" */
+
+  /* Semantic aliases for Wanderlust surfaces */
+  --wl-surface:var(--wl-pillow-white);
+  --wl-surface-deep:var(--wl-indigo);
+  --wl-surface-accent:var(--wl-red-wine);
+  --wl-on-surface:var(--wl-jet-black);
+  --wl-on-surface-deep:var(--wl-pillow-white);
+  --wl-accent:var(--wl-fuchsia);
+  --wl-accent-soft:var(--wl-blanket-blue);
+}

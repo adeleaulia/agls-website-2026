@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agls-teaser",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-10",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/uploads/*", "/api/*"],
+    "not_found_handling": "none"
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "agls-words",
+    "database_id": "20b2b2d4-8e94-43d2-ad1b-7f76c1b649f1",
+    "migrations_dir": "migrations"
+  }]
+}

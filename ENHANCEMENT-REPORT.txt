@@ -1,0 +1,56 @@
+AGLS 2026 - RESPONSIVE AND MOTION ENHANCEMENT
+Date: 13 November 2026
+
+SOURCE BASELINE
+- Full project archive: agls-workers-integrated(1).zip
+- Archive integrity verified before extraction.
+- Existing Cloudflare Worker, D1 binding, migration, assets, and website content retained.
+
+CHANGES
+1. public/carousel-motion.js
+   - Kept the existing three-run Line Up infinite-scroll implementation.
+   - Kept native touch scrolling; no touch gesture is captured by custom handlers.
+   - Reworked Supported By marquee lifecycle.
+   - Automatic sponsor movement now runs on coarse-pointer/touch devices as well
+     as desktop, unless prefers-reduced-motion is enabled.
+   - Sponsor movement pauses during touch/pointer interaction and resumes after
+     2.5 seconds of inactivity.
+   - Added abortable event listeners, animation-frame cleanup, and DOM replacement
+     reconciliation to prevent duplicate loops and detached-element listener leaks.
+
+2. public/integration-responsive.css
+   - Kept mobile navigation fixed with safe-area-aware offsets and content padding.
+   - Removed the coarse-pointer tablet branch that hid desktop navigation at
+     widths where the HTML only renders the mobile navigation below 640px. This
+     prevents a navigation gap on touch tablets between 640px and 1100px.
+   - Removed duplicate mobile body bottom-padding declaration.
+
+3. public/index.html
+   - Updated CSS/JS cache-busting query strings so browsers fetch the new files.
+   - Existing speaker data, assets, schedule, D1 client, and page content retained.
+
+4. test/sponsor-marquee.test.js
+   - Added tests for automatic movement on touch devices, pause/resume during
+     interaction, reduced-motion behavior, and cleanup.
+
+VALIDATION
+- node --check public/carousel-motion.js: PASS
+- node --test: 29 tests passed, 0 failed.
+- Existing Line Up infinite-wrap tests: PASS.
+- New sponsor-marquee tests: PASS.
+- Existing video, D1 API/client, and Worker range tests: PASS.
+- Physical iPhone/Android testing: NOT performed in this environment.
+- Browser visual/device testing: NOT completed; headless Chromium attempt did not
+  complete within the execution window.
+- Wrangler dry-run / Cloudflare deployment: NOT performed. npm ci could not
+  download locked dependencies because registry DNS returned EAI_AGAIN, so the
+  Wrangler CLI was unavailable. No production deployment was made.
+
+DEPLOYMENT
+After network access and Cloudflare authentication are available:
+  npm ci
+  npm run check
+  npm run deploy
+
+The existing wrangler.jsonc points to the existing Worker and D1 database.
+Do not create a duplicate database. Verify the deployed URL printed by Wrangler.

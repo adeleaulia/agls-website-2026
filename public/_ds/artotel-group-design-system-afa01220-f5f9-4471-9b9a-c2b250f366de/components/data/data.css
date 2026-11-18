@@ -1,0 +1,27 @@
+/* Data-display primitives — table.tsx, highlight-cards.tsx, pagination-controls.tsx, empty-state.tsx */
+.ag-table-wrap{position:relative;width:100%;overflow:auto}
+.ag-table{width:100%;caption-side:bottom;font-size:.875rem;border-collapse:collapse}
+.ag-table thead tr{border-bottom:1px solid var(--border)}
+.ag-table th{height:2.5rem;padding:.5rem;text-align:left;vertical-align:middle;font-weight:500;color:var(--muted-foreground);white-space:nowrap}
+.ag-table td{padding:.5rem;vertical-align:middle}
+.ag-table tbody tr{border-bottom:1px solid var(--border);transition:var(--transition-colors)}
+.ag-table tbody tr:last-child{border-bottom:0}
+.ag-table tbody tr:hover{background:color-mix(in oklab,var(--muted) 50%,transparent)}
+.ag-table tfoot{border-top:1px solid var(--border);background:color-mix(in oklab,var(--muted) 50%,transparent);font-weight:500}
+.ag-table__num{text-align:right;font-variant-numeric:tabular-nums}
+.ag-table__caption{margin-top:1rem;font-size:.875rem;color:var(--muted-foreground)}
+
+.ag-stat__label{font-size:.875rem;font-weight:500;color:var(--muted-foreground)}
+.ag-stat__value{font-size:2.25rem;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+.ag-stat__comparison{display:flex;align-items:center;gap:.25rem;font-size:.75rem;color:var(--muted-foreground)}
+.ag-stat__comparison--up{color:var(--status-positive)}
+.ag-stat__comparison--down{color:var(--status-negative)}
+.ag-stat__comparison svg{width:.75rem;height:.75rem}
+
+.ag-pagination{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem .5rem;font-size:.875rem;color:var(--muted-foreground)}
+.ag-pagination__pages{display:flex;align-items:center;gap:.25rem}
+
+.ag-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;padding:3.5rem 1.25rem;text-align:center;color:var(--muted-foreground)}
+.ag-empty__icon{display:flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;color:var(--muted-foreground);opacity:.6}
+.ag-empty__title{font-family:var(--font-ui);font-size:.875rem;font-weight:600;color:var(--foreground)}
+.ag-empty__description{font-size:.875rem;max-width:38ch}

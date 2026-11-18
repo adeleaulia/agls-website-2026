@@ -1,0 +1,73 @@
+AGLS VIDEO AND CONTENT UPDATE — 10 NOVEMBER 2026
+
+Confirmed code defects before the change
+- The rendered video DOM had no autoplay attribute. The template supplied the
+  lowercase autoplay prop to a React-backed runtime; it now uses autoPlay.
+- A ref made a single play() attempt and silently discarded every rejection.
+  There was no manual play/retry control or readiness/visibility recovery.
+- Split mobile videos copied the upper video's paused state to the lower one.
+  A blocked upper video could therefore stop the lower video too.
+- playsinline was already present in the inspected DOM. Missing playsinline
+  was NOT established as the original cause. The new code explicitly sets both
+  inline attributes plus muted/defaultMuted before requesting playback.
+- No actual iPhone or iOS Safari environment was available. These are confirmed
+  implementation defects, not proof of the precise failure on the reporting
+  device or its deployed host. Production URL/network traces were not supplied.
+
+Implementation
+- public/index.html: autoPlay spelling; legacy inline attribute and preload;
+  stable video refs; manual play/retry UI above overlays; no pause propagation;
+  lifecycle cleanup; confirmed hotline; requested speaker/schedule text and fit.
+- public/video-playback.js: shared video lifecycle, rejected-promise handling,
+  synchronous user-gesture retry, network-error reload, visibility/readiness
+  recovery and cleanup. Existing video sizes, layout and files retained.
+- test/video-playback.test.js: blocked playback, manual recovery, network failure,
+  hidden video and cleanup tests.
+- test/preview-blocked.py: local-only full-page blocked-autoplay reproduction.
+  Run with python test/preview-blocked.py; open http://127.0.0.1:8790/.
+  This simulates a policy rejection, not iOS. It is outside deployment assets.
+- DEPLOY.txt: removed obsolete placeholder-hotline instructions.
+- src/worker.js was unchanged: the existing byte-range handler passed tests.
+
+Media validation
+- All four supplied MP4 files use avc1/H.264 Main Profile, Level 4.1 (avcC
+  014d4029). moov precedes mdat in every file (fast-start metadata).
+- SHA-256 equality with the original assets verified: no videos replaced.
+- All four videos served video/mp4, HTTP 206 and correct bytes for bytes=0-1
+  through the local Workers server. Broader range behavior covered by tests.
+- Encoding/container inspection is not a substitute for real device decoding.
+
+WhatsApp
+- Root cause: the only WhatsApp CTA used placeholder 620000000000.
+- Updated to exact https://wa.me/628119220911; no predefined message existed.
+- Browser navigation followed the redirect to api.whatsapp.com with phone
+  628119220911 and displayed the profile Artotel Wanderlust. No message sent.
+- iOS/Android app handoff itself was not tested on physical devices.
+
+Content
+- Andri Meilani: Head of Branding, Artotel Group.
+- Anelies Praramadhani, B.Sc, M.A: Communication & Self Development Trainer.
+- Existing named portraits retained (only matching versions in supplied assets).
+  contain framing verified in rendered image-slot shadow DOM and desktop view.
+- Day 2 15:00 Tamara Gondo: Sociopreneur & Founder and CEO of Liberty Society.
+- Day 2 16:00 Anelies: full confirmed name and title.
+- Day 3 existing 13:45 panel: Andri name and Head of Branding title corrected.
+  Existing time retained; no new unconfirmed session/time added.
+- Session title TBA remains where no confirmed SESSION title was provided.
+
+Testing completed
+- 13 Node tests passed; Wrangler deploy --dry-run passed. No deployment made.
+- Desktop Chromium-based in-app browser: actual playback observed.
+- 390x844 mobile viewport: both split video timelines advanced; layout inspected.
+- 1440x900 desktop viewport: speaker portraits and typography visually inspected.
+- Simulated autoplay rejection on the full page: all videos initially paused;
+  Play video button visible; clicking started both visible videos inline.
+- Day 2 and Day 3 rendered text verified; confirmed titles present.
+- Captured browser warning/error logs were empty in tested flows.
+- No real iPhone, Safari/WebKit, iPhone Chrome or Android device test performed.
+
+Before production approval
+Test the deployed staging URL on iPhone Safari and iPhone Chrome, with autoplay
+allowed and restricted/Low Power Mode, plus Android and desktop. Check inline
+playback, retry after network failure, return from background, rotation and
+WhatsApp app handoff. Do not deploy this change to production without approval.

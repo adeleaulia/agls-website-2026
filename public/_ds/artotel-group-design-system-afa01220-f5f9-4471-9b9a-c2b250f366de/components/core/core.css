@@ -1,0 +1,77 @@
+/* Core primitives — values lifted from ag-redist/packages/ui/src/components/ui/*.tsx */
+
+/* Button */
+.ag-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;white-space:nowrap;border:1px solid transparent;border-radius:var(--radius-md);font-family:var(--font-ui);font-size:.875rem;font-weight:500;cursor:pointer;transition:var(--transition-colors);background:transparent;color:inherit}
+.ag-btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.ag-btn:disabled{pointer-events:none;opacity:.5}
+.ag-btn svg{pointer-events:none;width:1rem;height:1rem;flex-shrink:0}
+.ag-btn--default{background:var(--primary);color:var(--primary-foreground);box-shadow:var(--shadow)}
+.ag-btn--default:hover{background:color-mix(in oklab,var(--primary) 90%,transparent)}
+.ag-btn--destructive{background:var(--destructive);color:var(--destructive-foreground);box-shadow:var(--shadow-sm)}
+.ag-btn--destructive:hover{background:color-mix(in oklab,var(--destructive) 90%,transparent)}
+.ag-btn--outline{border-color:var(--input);background:var(--background);box-shadow:var(--shadow-sm)}
+.ag-btn--outline:hover{background:var(--accent);color:var(--accent-foreground)}
+.ag-btn--secondary{background:var(--secondary);color:var(--secondary-foreground);box-shadow:var(--shadow-sm)}
+.ag-btn--secondary:hover{background:color-mix(in oklab,var(--secondary) 80%,transparent)}
+.ag-btn--ghost:hover{background:var(--accent);color:var(--accent-foreground)}
+.ag-btn--link{color:var(--primary);text-underline-offset:4px}
+.ag-btn--link:hover{text-decoration:underline}
+.ag-btn--size-default{height:2.25rem;padding:.5rem 1rem}
+.ag-btn--size-sm{height:2rem;padding:0 .75rem;font-size:.75rem}
+.ag-btn--size-lg{height:2.5rem;padding:0 2rem}
+.ag-btn--size-icon{height:2.25rem;width:2.25rem;padding:0}
+
+/* Badge */
+.ag-badge{display:inline-flex;align-items:center;border:1px solid transparent;border-radius:var(--radius-md);padding:.125rem .625rem;font-size:.75rem;font-weight:600;line-height:1.25;transition:var(--transition-colors)}
+.ag-badge--default{background:var(--primary);color:var(--primary-foreground);box-shadow:var(--shadow)}
+.ag-badge--secondary{background:var(--secondary);color:var(--secondary-foreground)}
+.ag-badge--destructive{background:var(--destructive);color:var(--destructive-foreground);box-shadow:var(--shadow)}
+.ag-badge--outline{border-color:var(--border);color:var(--foreground)}
+
+/* Card */
+.ag-card{border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--card);color:var(--card-foreground);box-shadow:var(--shadow)}
+.ag-card__header{display:flex;flex-direction:column;gap:.375rem;padding:1.5rem}
+.ag-card__title{font-family:var(--font-ui);font-weight:600;line-height:1;letter-spacing:-.01em}
+.ag-card__description{font-size:.875rem;color:var(--muted-foreground)}
+.ag-card__content{padding:0 1.5rem 1.5rem}
+.ag-card__footer{display:flex;align-items:center;gap:.5rem;padding:0 1.5rem 1.5rem}
+
+/* Alert */
+.ag-alert{position:relative;width:100%;border:1px solid var(--border);border-radius:var(--radius-lg);padding:.75rem 1rem;font-size:.875rem;background:var(--background);color:var(--foreground)}
+.ag-alert--destructive{border-color:color-mix(in oklab,var(--destructive) 50%,transparent);color:var(--destructive)}
+.ag-alert__title{margin:0 0 .25rem;font-family:var(--font-ui);font-weight:500;line-height:1;letter-spacing:-.01em}
+.ag-alert__description{font-size:.875rem;line-height:1.625}
+
+/* Callout */
+.ag-callout{display:flex;align-items:flex-start;gap:.75rem;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;background:var(--background);color:var(--foreground)}
+.ag-callout--warning{background:#fefce8;border-color:#fef08a;color:#713f12}
+.ag-callout--error{background:#fef2f2;border-color:#fecaca;color:#7f1d1d}
+.ag-callout--info{background:#eff6ff;border-color:#bfdbfe;color:#1e3a8a}
+.ag-callout__icon{flex-shrink:0;display:flex}
+.ag-callout__title{margin:0 0 .25rem;font-family:var(--font-ui);font-weight:500;line-height:1}
+.ag-callout__text{font-size:.875rem;line-height:1.625;margin:0}
+
+/* Separator */
+.ag-separator{flex-shrink:0;background:var(--border);border:0}
+.ag-separator--horizontal{height:1px;width:100%}
+.ag-separator--vertical{width:1px;align-self:stretch}
+
+/* Skeleton */
+.ag-skeleton{border-radius:var(--radius-md);background:color-mix(in oklab,var(--primary) 10%,transparent);animation:ag-pulse 2s var(--ease-pulse) infinite}
+
+/* Spinner */
+.ag-spinner{display:inline-block;border-radius:50%;border:2px solid color-mix(in oklab,var(--primary) 20%,transparent);border-top-color:var(--primary);animation:ag-spin 1s linear infinite}
+
+/* Progress */
+.ag-progress{position:relative;height:.5rem;width:100%;overflow:hidden;border-radius:var(--radius-full);background:color-mix(in oklab,var(--primary) 20%,transparent)}
+.ag-progress__indicator{height:100%;width:100%;background:var(--primary);transition:transform var(--duration-slow) var(--ease-out)}
+
+/* Avatar */
+.ag-avatar{position:relative;display:inline-flex;flex-shrink:0;overflow:hidden;border-radius:var(--radius-full);height:2.5rem;width:2.5rem}
+.ag-avatar img{aspect-ratio:1/1;height:100%;width:100%;object-fit:cover}
+.ag-avatar__fallback{display:flex;height:100%;width:100%;align-items:center;justify-content:center;border-radius:var(--radius-full);background:var(--muted);font-size:.75rem;font-weight:600;color:var(--muted-foreground)}
+
+/* Pill — ARTOTEL Commercial Hub status pill (assets/css/styles.css `.pill`) */
+.ag-pill{display:inline-flex;align-items:center;gap:.3125rem;padding:.1875rem .625rem;border-radius:20px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.ag-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
+.ag-pill--no-dot::before{display:none}

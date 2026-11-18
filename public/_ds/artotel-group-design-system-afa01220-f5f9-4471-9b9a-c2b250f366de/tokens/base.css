@@ -1,0 +1,9 @@
+/* Minimal element defaults so components and specimen cards render consistently. */
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-ui);font-size:var(--text-app-sm);line-height:var(--leading-body);color:var(--foreground);background:var(--background);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6{margin:0;font-family:var(--font-heading);font-weight:var(--weight-display-medium);line-height:var(--leading-subhead)}
+p{margin:0}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,select,textarea{font:inherit}
+code,kbd,pre{font-family:var(--font-mono)}

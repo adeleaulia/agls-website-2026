@@ -1,0 +1,7 @@
+/* Brand lockups. Assets live in assets/ — see readme.md ICONOGRAPHY. */
+.ag-logo{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;color:inherit}
+.ag-logo img{display:block;height:100%;width:auto}
+.ag-logo__mark{display:block;flex-shrink:0;border-radius:var(--radius-circle)}
+.ag-logo__wordmark{font-family:var(--font-display);font-weight:var(--weight-display-medium);letter-spacing:-.01em;line-height:1;white-space:nowrap}
+.ag-logo__tagline{font-family:var(--font-display);font-style:italic;font-weight:var(--weight-display-regular);line-height:1;opacity:.9}
+.ag-logo--stacked{flex-direction:column;align-items:flex-start;gap:.375rem}

@@ -1,0 +1,19 @@
+/* Motion. The products animate sparingly: colour/background transitions on
+   interactive elements, a small translate+fade on modals, a linear top progress
+   bar during navigation, and rotation for spinners. No bounce, no spring. */
+:root{
+  --duration-instant:.12s; /* @kind other */   /* button/nav hover (Commercial Hub) */
+  --duration-fast:.15s; /* @kind other */
+  --duration-modal:.14s; /* @kind other */     /* modal pop */
+  --duration-normal:.2s; /* @kind other */     /* toast in/out */
+  --duration-slow:.3s; /* @kind other */       /* progress bar width */
+
+  --ease-standard:ease; /* @kind other */
+  --ease-out:cubic-bezier(0.4,0,0.2,1); /* @kind other */
+  --ease-pulse:cubic-bezier(0.4,0,0.6,1); /* @kind other */ /* skeleton pulse, 2s infinite */
+
+  --transition-colors:color var(--duration-fast) var(--ease-standard),background-color var(--duration-fast) var(--ease-standard),border-color var(--duration-fast) var(--ease-standard); /* @kind other */
+}
+@keyframes ag-pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+@keyframes ag-spin{to{transform:rotate(360deg)}}
+@keyframes ag-pulse{0%,100%{opacity:1}50%{opacity:.5}}

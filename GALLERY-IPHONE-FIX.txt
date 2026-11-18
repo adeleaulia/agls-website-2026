@@ -1,0 +1,19 @@
+AGLS 2026 - iPhone Gallery Layout Fix
+
+Issue observed from the supplied iPhone screenshot:
+- Gallery photo frame expanded to an excessive portrait height and cropped the landscape source image.
+- Gallery previous/next controls and position hint were obscured by the fixed mobile bottom navigation.
+
+Changes made:
+- Updated public/index.html: Gallery image-slot now explicitly uses fit="contain" so the complete source photograph is visible.
+- Updated public/integration-responsive.css only for mobile Gallery presentation.
+- Constrained each mobile Gallery card to a landscape 4:3 frame with a viewport-aware maximum height.
+- Positioned image-slot to fill the bounded card; the full photo is contained without cropping.
+- Reserved additional scrollable space after Gallery controls so users can scroll the controls above the fixed bottom navigation.
+- Desktop Gallery layout and source photographs were not changed.
+- Added test/gallery-mobile-layout.test.js to guard the HTML/CSS requirements.
+
+Validation:
+- `node --test`: must pass before release.
+- Physical iPhone Safari verification has not been performed in this environment.
+- Cloudflare production deployment has not been performed.

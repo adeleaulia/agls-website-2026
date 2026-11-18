@@ -1,0 +1,45 @@
+/* Product themes. Apply to a wrapper element to retheme app components.
+   `.theme-hub` — ARTOTEL Commercial / Strategic Hub (ag-commercial). Its own
+   red (#c8102e) predates the brand-guideline red and is kept verbatim.
+   `.theme-team-desk` — ag-team-desk: Inter, larger radius, same terracotta. */
+.theme-hub{
+  --background:#f5f6f8;
+  --foreground:#14161a;
+  --card:#ffffff;
+  --card-foreground:#14161a;
+  --muted:#fafbfc;
+  --muted-foreground:#6b7280;
+  --border:#e6e8ec;
+  --input:#e6e8ec;
+  --primary:#c8102e;
+  --primary-foreground:#ffffff;
+  --primary-hover:#9c0c24;
+  --primary-soft:#fdeef0;
+  --ring:#c8102e;
+  --nav-background:#14161a;
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:var(--shadow-hub);
+  --shadow-lg:var(--shadow-hub-lg);
+  --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+
+  --hub-green:#16895a; --hub-green-bg:#e7f6ef;
+  --hub-amber:#b3791a; --hub-amber-bg:#fcf2dd;
+  --hub-blue:#2563eb;  --hub-blue-bg:#e7eefe;
+  --hub-slate:#5b6471; --hub-slate-bg:#eef0f3;
+  --hub-red:#c8102e;   --hub-red-bg:#fdeef0;
+  --hub-purple:#7c3aed;--hub-purple-bg:#f0e9fe;
+}
+.theme-team-desk{
+  --radius:0.625rem;
+  --font-ui:var(--font-app);
+  --sidebar-background:hsl(0 0% 98%);
+  --sidebar-foreground:hsl(240 5.3% 26.1%);
+  --sidebar-border:hsl(220 13% 91%);
+}
+/* Brand artefact surfaces (decks, posters, campaign pages) */
+.theme-brand-red{background:var(--ag-red);color:var(--ag-white)}
+.theme-brand-blue{background:var(--ag-blue);color:var(--ag-white)}
+.theme-brand-light{background:var(--ag-white);color:var(--ag-red)}
+.theme-wanderlust{background:var(--wl-pillow-white);color:var(--wl-jet-black)}
+.theme-wanderlust-deep{background:var(--wl-indigo);color:var(--wl-pillow-white)}

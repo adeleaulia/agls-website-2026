@@ -1,0 +1,62 @@
+/* Type. Brand Guidelines pp.52–56 (Group) and pp.91–93 (Wanderlust).
+   Gambetta = headlines. Gambetta or Be Vietnam Pro = sub-headlines (never mixed
+   in the same line for Artotel Group). Be Vietnam Pro only = body and anything
+   small. Wanderlust inverts the pairing: Be Vietnam Pro leads, Gambetta *Italic*
+   is used to emphasise words inside a headline, set 5–10% larger. */
+:root{
+  --font-display:"Gambetta","Iowan Old Style",Georgia,serif;
+  --font-sans:"Be Vietnam Pro",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  /* Team Desk product surface pins Inter */
+  --font-app:"Inter",ui-sans-serif,system-ui,sans-serif;
+
+  --font-heading:var(--font-display);
+  --font-subheading:var(--font-display);
+  --font-body:var(--font-sans);
+  --font-ui:var(--font-sans);
+
+  /* Weights actually available */
+  --weight-display-light:300;
+  --weight-display-regular:400;
+  --weight-display-medium:500;
+  --weight-display-semibold:600;
+  --weight-display-bold:700;
+  --weight-body-light:300;
+  --weight-body-regular:400;
+  --weight-body-medium:500;
+  --weight-body-semibold:600;
+  --weight-body-bold:700;
+  --weight-body-black:900;
+
+  /* Brand scale. The guidelines set no fixed sizes — only a ratio: body cap
+     height is the benchmark, sub-headline ≈ 4x, headline ≈ 7x (p.55). */
+  --scale-ratio-body:1; /* @kind other */
+  --scale-ratio-subhead:4; /* @kind other */
+  --scale-ratio-headline:7; /* @kind other */
+
+  --text-display-1:clamp(3.5rem,7vw,7rem);      /* headline, 7x */
+  --text-display-2:clamp(2.75rem,5vw,5rem);
+  --text-subhead-1:clamp(1.5rem,2.4vw,2.5rem);  /* sub-headline, 4x */
+  --text-subhead-2:clamp(1.25rem,1.8vw,1.75rem);
+  --text-body-lg:1.125rem;
+  --text-body:1rem;
+  --text-body-sm:0.875rem;
+  --text-caption:0.75rem;
+
+  /* Product UI scale (shadcn defaults as used in the desks) */
+  --text-app-xs:0.75rem;
+  --text-app-sm:0.875rem;
+  --text-app-base:1rem;
+  --text-app-lg:1.125rem;
+  --text-app-2xl:1.5rem;
+  --text-app-4xl:2.25rem;
+
+  --leading-display:1.05; /* @kind other */
+  --leading-subhead:1.2; /* @kind other */
+  --leading-body:1.55; /* @kind other */
+  --leading-tight:1.1; /* @kind other */
+
+  --tracking-display:-0.02em;
+  --tracking-body:0;
+  --tracking-eyebrow:0.16em;   /* uppercase eyebrows in the desks */
+}

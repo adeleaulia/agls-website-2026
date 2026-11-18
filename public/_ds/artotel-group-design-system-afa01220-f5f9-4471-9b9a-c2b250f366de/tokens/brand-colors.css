@@ -1,0 +1,27 @@
+/* Artotel Group brand colours — Brand Guidelines p.49.
+   Two primaries only. Recommended proportion: Red 50%, Blue 40%, photography 10%. */
+:root{
+  /* Base */
+  --ag-red:#ff005a;            /* "Rad to Red"  — RGB 255/0/90   — CMYK 0/100/55/0 */
+  --ag-blue:#00054b;           /* "Bask in Blue"— RGB 0/5/75     — CMYK 100/100/0/65 */
+  --ag-white:#ffffff;
+  --ag-black:#000000;
+
+  /* Semantic brand aliases (marketing / brand artefacts, NOT product chrome) */
+  --brand-primary:var(--ag-red);
+  --brand-secondary:var(--ag-blue);
+  --brand-on-primary:var(--ag-white);
+  --brand-on-secondary:var(--ag-white);
+  --brand-canvas:var(--ag-white);
+
+  /* Approved pairings — p.50. "all sizes" = safe for small text & graphics. */
+  --pair-red-on-white-bg:var(--ag-white);   --pair-red-on-white-fg:var(--ag-red);    /* all sizes */
+  --pair-white-on-red-bg:var(--ag-red);     --pair-white-on-red-fg:var(--ag-white);  /* large–medium only */
+  --pair-white-on-blue-bg:var(--ag-blue);   --pair-white-on-blue-fg:var(--ag-white); /* all sizes */
+  --pair-red-on-blue-bg:var(--ag-blue);     --pair-red-on-blue-fg:var(--ag-red);     /* large display only */
+
+  /* Colour proportion guide (p.49) */
+  --proportion-red:50%; /* @kind other */
+  --proportion-blue:40%; /* @kind other */
+  --proportion-photo:10%; /* @kind other */
+}

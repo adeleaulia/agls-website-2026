@@ -1,0 +1,15 @@
+/* Webfonts.
+   Artotel Group's two brand typefaces are Gambetta (display/headline) and
+   Be Vietnam Pro (everything else). No licensed binaries were supplied with the
+   brand guidelines, so both are loaded from their public foundry/Google CDNs.
+   Replace these @import lines with local @font-face rules once the licensed
+   .woff2 files are available (drop them in assets/fonts/). */
+
+/* Gambetta — Indian Type Foundry, distributed via Fontshare (300–700 + italics) */
+@import url("https://api.fontshare.com/v2/css?f%5B%5D=gambetta@300,400,500,600,700,1,2&display=swap");
+
+/* Be Vietnam Pro — Google Fonts (100–900 + italics) */
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* Inter — used by the Team Desk product surface (packages/config/tailwind-preset.css) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");

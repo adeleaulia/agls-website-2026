@@ -1,0 +1,74 @@
+PANDUAN DEPLOY AGLS KE CLOUDFLARE WORKERS
+
+Folder proyek: C:\Users\ARTOTEL GROUP\Documents\ChatGPT\Princess\agls-workers
+File situs yang diedit: public/index.html dan aset di public/.
+Salinan asli di Downloads tidak diubah.
+
+1. Buka PowerShell dan masuk ke proyek:
+   cd "C:\Users\ARTOTEL GROUP\Documents\ChatGPT\Princess\agls-workers"
+
+2. Jika pindah komputer atau dependency belum terpasang:
+   npm.cmd ci
+   Gunakan Node.js LTS yang didukung Wrangler.
+
+3. Preview dengan runtime Cloudflare:
+   npm.cmd run db:local
+   npm.cmd run dev
+   Buka http://127.0.0.1:8788/
+   Ctrl+C menghentikan server. Port 8787 adalah preview lama dari Downloads.
+
+4. Periksa kode dan paket tanpa menerbitkan:
+   npm.cmd run check
+
+5. Login akun Cloudflare:
+   npx.cmd wrangler login
+   Selesaikan login dan otorisasi di browser.
+   npx.cmd wrangler whoami
+   Jika memiliki beberapa akun, tambahkan account_id akun tujuan ke wrangler.jsonc.
+
+6. Periksa name di wrangler.jsonc (default: agls-teaser).
+   Nama yang sama dalam akun yang sama akan memperbarui Worker tersebut.
+   Untuk proyek terpisah, pilih nama Worker yang belum digunakan.
+
+7. Selesaikan konfigurasi D1 dan migrasi sesuai DATABASE.txt terlebih dahulu.
+   Deploy hanya setelah persetujuan eksplisit. Terbitkan:
+   npm.cmd run deploy
+   Wrangler mencetak URL https://agls-teaser.<subdomain-akun>.workers.dev
+   Buka URL yang benar-benar dicetak, bukan contoh di atas.
+
+8. Setelah deploy, uji desktop dan ponsel, khususnya Safari:
+   - Halaman, navigasi, gambar, playback dan seek video.
+   - Form word wall dan tombol kontak.
+   - Refresh serta akses URL aset langsung.
+
+9. Domain sendiri (opsional):
+   Dashboard Cloudflare > Workers & Pages > agls-teaser > Settings
+   > Domains & Routes > Add > Custom Domain.
+   Gunakan domain dalam zone Cloudflare akun tersebut dan ikuti petunjuk DNS.
+
+UPDATE BERIKUTNYA
+Edit public/, jalankan npm.cmd run check, kemudian npm.cmd run deploy.
+Tidak ada proses build frontend. Wrangler mengemas Worker dan mengunggah public/.
+Untuk integrasi Git: root directory adalah folder proyek ini, deploy command
+npm run deploy, tanpa build frontend. Sertakan package-lock.json; jangan
+unggah node_modules, .npm-cache, .wrangler, atau token ke repository.
+
+CATATAN SEBELUM PELUNCURAN
+- Hotline WhatsApp telah dikonfirmasi: https://wa.me/628119220911.
+- Word wall sekarang menggunakan D1 melalui /api/words. GET menampilkan 20
+  entri terbaru; semua kiriman lama tetap disimpan. Database produksi sudah
+  terhubung; lihat DATABASE.txt untuk konfigurasi dan migrasi berikutnya.
+- React/Babel dimuat dari unpkg dan font dari Google; koneksi internet diperlukan.
+- /uploads/* menjalankan Worker untuk dukungan Range/206 pada video. Request
+  tersebut mengikuti kuota/biaya Workers, bukan jatah aset statis gratis.
+  Implementasi membaca file video ke memori untuk mengambil byte range.
+  Untuk trafik tinggi/video lebih besar, pindahkan video ke R2 atau Stream.
+- Aset terbesar saat persiapan sekitar 16,7 MB. Jangan menambah file melampaui
+  batas ukuran aset Cloudflare tanpa mengecek batas platform terbaru.
+- Pengujian lokal/dry-run tidak menggantikan uji Safari pada URL produksi.
+- Lihat VALIDATION.txt untuk hasil pengujian video dan perubahan konten terbaru.
+
+DOKUMENTASI
+https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/
+https://developers.cloudflare.com/workers/static-assets/binding/
+https://developers.cloudflare.com/workers/wrangler/commands/

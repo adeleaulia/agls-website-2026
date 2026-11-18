@@ -1,0 +1,96 @@
+html { scroll-padding-top: 76px; }
+section { scroll-margin-top: 76px; }
+#schedule, #lineup { overflow-wrap: anywhere; }
+#lineup-strip > div { min-width: 0; }
+#lineup-strip {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+  overflow-anchor: none;
+  touch-action: auto;
+}
+#lineup-strip image-slot::part(image) { touch-action: auto; }
+#mobile-navigation { display: none !important; }
+/* Remain mounted across rotation and browser-toolbar resizes. Fixed positioning
+   follows the browser viewport; no scroll/visualViewport repositioning script. */
+@media (max-width: 639px) {
+  #desktop-navigation { display: none !important; }
+  #mobile-navigation {
+    display: grid !important;
+    position: fixed !important;
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    left: max(12px, env(safe-area-inset-left, 0px)) !important;
+    right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    box-sizing: border-box;
+    z-index: 60;
+    max-width: calc(100vw - 24px);
+  }
+  html body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+  html { scroll-padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+}
+#sp-viewport { overflow-x: auto !important; scrollbar-width: none; }
+#sp-track img { flex-shrink: 0; }
+@media (max-width: 999px) {
+  #schedule div[style*="grid-template-columns:140px"] { display: none !important; }
+}
+@media (max-width: 639px) {
+  #gallery #gallery-strip > div { height: auto; aspect-ratio: 4 / 3; }
+  #gallery-strip image-slot { height: 100%; }
+  #gallery-strip image-slot::part(image) { object-fit: contain; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #top { min-height: 600px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html, body { scroll-behavior: auto; }
+}
+
+/* iPhone Gallery: constrain portrait photos to a predictable viewport-sized frame.
+   The image remains fully visible; the card no longer grows to the source image height. */
+@media (max-width: 639px) {
+  #gallery-strip {
+    align-items: start !important;
+    min-height: 0 !important;
+  }
+  #gallery-strip > div {
+    position: relative !important;
+    box-sizing: border-box !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    height: min(75vw, 52vh, 420px) !important;
+    min-height: 0 !important;
+    max-height: 420px !important;
+    aspect-ratio: 4 / 3 !important;
+    overflow: hidden !important;
+  }
+  @supports (height: 1svh) {
+    #gallery-strip > div {
+      height: min(75vw, 52svh, 420px) !important;
+    }
+  }
+  #gallery-strip > div > image-slot,
+  #gallery-strip image-slot {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+  }
+  #gallery-strip image-slot::part(image) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+  /* Let visitors scroll the controls above the fixed bottom navigation. */
+  #gallery-controls {
+    margin-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: 8px;
+    scroll-margin-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+  #gallery-controls button {
+    flex: 0 0 48px;
+  }
+}

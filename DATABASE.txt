@@ -1,0 +1,7 @@
+D1 STATUS â€” 13 November 2026
+Reuse ONLY database agls-words, UUID 20b2b2d4-8e94-43d2-ad1b-7f76c1b649f1, binding DB.
+Read-only remote SQL verified words and word_rate_limits tables, 9 stored words, latest ID 38. Latest timestamps include 2026-11-12T06:54:17.398Z. Query reported zero rows written.
+This integration has NOT been deployed. No remote migrations or submissions were performed. The existing Worker and migration are unchanged. The API client adds a friendly error for non-JSON failure responses.
+GET /api/words returns latest 20 by descending ID; old rows remain stored. POST uses server validation, parameter binding and atomic per-IP throttling (five per minute). No delete API or localStorage fallback.
+Local D1 is isolated in this copy's .wrangler/state. Browser test submissions stay local. Local setup: npm ci, npm run db:local, npm run dev. Production changes require explicit deployment approval. Never create a duplicate database.
+Physical multi-device testing and production submission of this new frontend remain pending deployment approval and device access.

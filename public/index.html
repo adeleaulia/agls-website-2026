@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="./words-client.js?v=20261113"></script>
+<script src="./video-playback.js"></script>
+<link rel="stylesheet" href="./integration-responsive.css?v=20261113-lineup-motion-3">
+<script src="./carousel-motion.js?v=20261113-lineup-motion-3"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <!-- Artotel Favicon -->
+<link rel="icon" type="image/png" href="assets/logomark-white.png">
+<link rel="apple-touch-icon" href="assets/logomark-white.png">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/brand-colors.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/wanderlust-colors.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/typography.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/shape.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/themes.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/tokens/base.css">
+<link rel="stylesheet" href="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/styles.css">
+<script src="_ds/artotel-group-design-system-afa01220-f5f9-4471-9b9a-c2b250f366de/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap">
+<style>
+html,body{margin:0;padding:0;background:#000;scroll-behavior:smooth;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+a:hover{color:#f04f51}
+/* iOS only: keep the existing 493/550 portrait frame without percentage-height
+   feedback through the flex item and image-slot's own fallback aspect ratio. */
+@supports (-webkit-touch-callout: none) {
+  @media (hover: none) and (pointer: coarse) {
+    #lineup-strip > div > div:first-child {
+      flex: none;
+      aspect-ratio: auto !important;
+      height: 0;
+      padding-top: 111.561866%;
+    }
+    #lineup-strip image-slot {
+      position: absolute;
+      inset: 0;
+      height: auto;
+      aspect-ratio: auto;
+    }
+    /* Override the image's editor-oriented touch-action:none in its shadow DOM.
+       Allow native vertical page scrolling AND horizontal carousel swiping. */
+    #lineup-strip image-slot::part(image) { touch-action: auto; }
+  }
+}
+/* Native touch gestures on the existing photo components; iPhone frame fix above stays intact. */
+@media (hover: none) and (pointer: coarse) {
+  #lineup-strip image-slot::part(image), #gallery image-slot::part(image) { touch-action: auto; }
+}
+/* Gallery: centered editorial collage with visible breathing room on desktop. */
+#gallery-controls { display: none; }
+#gallery > div {
+  width: 100% !important;
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#gallery #gallery-strip {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 1360px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-rows: clamp(135px, 11vw, 175px) !important;
+  grid-auto-flow: dense !important;
+  gap: clamp(10px, 1vw, 14px) !important;
+}
+#gallery #gallery-strip > div {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #141414;
+}
+#gallery #gallery-strip image-slot {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@media (min-width: 640px) and (max-width: 900px) {
+  #gallery #gallery-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-rows: clamp(120px, 17vw, 155px) !important;
+  }
+}
+@media (max-width: 639px) {
+  /* Keep text and album cards inset, but let the photo itself touch both screen edges. */
+  #gallery {
+    padding: 40px 18px 24px !important;
+  }
+  #gallery > div {
+    max-width: 100% !important;
+    gap: 12px !important;
+  }
+  #gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #gallery-controls button {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255,255,255,.4);
+    background: transparent;
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+  }
+  #gallery-controls button:disabled { opacity: .35; cursor: default; }
+
+  /* Zero-gutter mobile carousel. Each slide uses the photo's 3:2 landscape frame. */
+  #gallery #gallery-strip {
+    display: flex !important;
+    align-items: stretch !important;
+    width: calc(100% + 36px) !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 -18px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  #gallery #gallery-strip::-webkit-scrollbar { display: none; }
+  #gallery #gallery-strip > div {
+    position: relative !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3 / 2 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    scroll-snap-align: start;
+  }
+  #gallery #gallery-strip image-slot {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+  }
+  #gallery #gallery-strip image-slot::part(image) {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+}
+#words [data-shared-word] { max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; }
+</style>
+</helmet>
+<div style="width:100%;background:#000;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;overflow-x:clip">
+
+  <nav id="desktop-navigation" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:clamp(14px,3vw,22px) clamp(18px,5vw,56px);box-sizing:border-box;color:{{ navInk }};background:{{ navBg }}">
+    <span></span>
+    <sc-if value="{{ notMobile }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:clamp(14px,3vw,32px);font-size:clamp(10px,2.6vw,12px);font-weight:600;letter-spacing:0.16em;text-transform:uppercase">
+        <a href="#lineup">Line Up</a>
+        <a href="#schedule">Schedule</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </sc-if>
+  </nav>
+    <nav id="mobile-navigation" aria-label="Sections" style="position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;display:grid;grid-template-columns:repeat(4,1fr);background:rgba(52,18,18,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+      <a href="#lineup" style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:999px;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase" style-active="background:#f04f51">Line Up</a>
+      <a href="#schedule" style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:999px;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase" style-active="background:#f04f51">Schedule</a>
+      <a href="#gallery" style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:999px;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase" style-active="background:#f04f51">Gallery</a>
+      <a href="#contact" style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:999px;background:#f04f51;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Contact</a>
+    </nav>
+
+  <section id="top" data-screen-label="01 Hero" style="position:relative;height:{{ heroH }};min-height:560px;width:100%;background:{{ heroBg }};color:{{ heroInk }}">
+   <div style="position:sticky;top:0;height:100dvh;min-height:560px;width:100%;overflow:hidden">
+    <sc-if value="{{ isStory }}" hint-placeholder-val="{{ true }}">
+      {{ storyEl }}
+      <sc-if value="{{ isVideoWords }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;inset:0;z-index:1;background:#000;overflow:hidden">
+          <video ref="{{ vwBgRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" webkit-playsinline="" preload="auto" aria-hidden="true" src="{{ vwSrc }}" style="position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;display:{{ vwBgDisplay }};filter:blur(40px) brightness(0.5) saturate(1.2)"></video>
+          <sc-if value="{{ notSplit }}" hint-placeholder-val="{{ true }}">
+            <video ref="{{ vwRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" webkit-playsinline="" preload="auto" src="{{ vwSrc }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:{{ vwFit }};object-position:{{ vwPos }};display:block"></video>
+          </sc-if>
+          <sc-if value="{{ isSplit }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:0;right:0;top:calc((100dvh - 190px) / 2 - min(125.38vw, 100dvh - 254px - 61.88vw) * 1.2 / 2 - 30.94vw + 4px);height:30.94vw;overflow:hidden">
+              <video ref="{{ vwTopRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" webkit-playsinline="" preload="auto" aria-hidden="true" src="{{ vwSrc }}" style="position:absolute;top:0;left:50%;width:110vw;height:61.88vw;transform:translateX(-50%);display:block"></video>
+            </div>
+            <div style="position:absolute;left:0;right:0;top:calc((100dvh - 190px) / 2 + min(125.38vw, 100dvh - 254px - 61.88vw) * 1.2 / 2 - 4px);height:30.94vw;overflow:hidden">
+              <video ref="{{ vwBotRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" webkit-playsinline="" preload="auto" aria-hidden="true" src="{{ vwSrc }}" style="position:absolute;bottom:0;left:50%;width:110vw;height:61.88vw;transform:translateX(-50%);display:block"></video>
+            </div>
+          </sc-if>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.75));pointer-events:none"></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isLogo }}" hint-placeholder-val="{{ false }}">
+        <div id="hero-lockup" style="position:absolute;left:50%;top:{{ lockupTop }};transform:translate(-50%,-50%) scale({{ lockupScale }});z-index:7;display:block;width:max-content;max-width:94vw;pointer-events:none;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:600;letter-spacing:-0.04em;line-height:0.92">
+          <img src="{{ lockupSrc }}" alt="Artotel Group Leaders Summit SHIF+ · Cibubur, 24–26 November 2026" style="display:block;width:{{ lockupW }};height:auto">
+        </div>
+      </sc-if>
+      <sc-if value="{{ showWord }}" hint-placeholder-val="{{ true }}">
+      <form onSubmit="{{ submitWord }}" style="position:absolute;left:50%;top:{{ formTop }};bottom:{{ formBottom }};transform:{{ formTf }};z-index:6;width:min(92vw,460px);display:flex;flex-direction:column;gap:8px;align-items:center">
+        <label for="shift-word" style="font-size:{{ wordLabelSize }};font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#fff;text-align:center">What does SHIF+ mean to you?</label>
+        <div style="display:flex;width:100%;background:#fff;border:2px solid #fff">
+          <input id="shift-word" ref="{{ wordInputRef }}" value="{{ word }}" onChange="{{ onWord }}" maxLength="{{ maxLen }}" disabled="{{ wordSaving }}" autoComplete="off" placeholder="Type one word" aria-label="Your one word" style="flex:1;min-width:0;height:48px;border:0;outline:none;padding:0 14px;font-family:'Space Grotesk',system-ui,sans-serif;font-size:18px;font-weight:600;color:#000;background:#fff;text-transform:uppercase;letter-spacing:0.02em">
+          <button type="submit" disabled="{{ wordSaving }}" style="height:48px;padding:0 18px;border:0;background:#f04f51;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#85241a">{{ addLabel }}</button>
+        </div>
+        <span role="status" style="font-size:12px;min-height:16px;color:{{ wordMsgColor }}">{{ wordMsg }}</span>
+      </form>
+      </sc-if>
+    </sc-if>
+    <sc-if value="{{ isKinetic }}" hint-placeholder-val="{{ false }}">
+      {{ heroField }}
+    </sc-if>
+    <sc-if value="{{ isFilm }}" hint-placeholder-val="{{ false }}">
+      <video ref="{{ filmBgRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" webkit-playsinline="" preload="auto" aria-hidden="true" src="uploads/WEBSITE%20COUNTDOWN%20AGLS%202026-d826bba0.mp4" style="position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;display:block;filter:blur(40px) brightness(0.45) saturate(1.2)"></video>
+      <video ref="{{ filmRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" webkit-playsinline="" preload="auto" src="uploads/WEBSITE%20COUNTDOWN%20AGLS%202026-d826bba0.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:{{ filmFit }};display:block"></video>
+    </sc-if>
+    <sc-if value="{{ videoNeedsPlay }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;top:76px;left:50%;transform:translateX(-50%);z-index:20;width:min(90vw,360px);display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:auto">
+        <button type="button" onClick="{{ playHeroVideo }}" style="min-height:48px;padding:12px 22px;border:1px solid #fff;background:#f04f51;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;cursor:pointer">{{ videoButton }}</button>
+        <span role="status" style="font-size:12px;color:#fff;background:rgba(0,0,0,0.8);text-align:center">{{ videoMessage }}</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isMotion }}" hint-placeholder-val="{{ false }}">
+      <div ref="{{ mgRef }}" style="position:absolute;inset:0;overflow:hidden;background:#000;perspective:900px">
+        <div style="position:absolute;left:50%;top:7%;width:min(78vw,760px);display:flex;flex-direction:column;align-items:center;gap:clamp(6px,1.3vh,12px);transform:translateX(-50%);will-change:transform">
+          <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5">
+            <div style="width:{{ b.w }};height:clamp(10px,2.4vh,22px);clip-path:polygon(0 0,100% 0,96% 100%,4% 100%);background:linear-gradient(90deg,#85241a,#f04f51 18%,#f9c9ca 34%,#a7dbd7 47%,#ffffff 51%,#a7dbd7 57%,#f04f51 78%,#85241a);background-size:220% 100%;will-change:transform,background-position"></div>
+          </sc-for>
+        </div>
+        <div style="position:absolute;left:50%;bottom:13%;width:min(78vw,760px);display:flex;flex-direction:column-reverse;align-items:center;gap:clamp(6px,1.3vh,12px);transform:translateX(-50%);will-change:transform">
+          <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5">
+            <div style="width:{{ b.w }};height:clamp(10px,2.4vh,22px);clip-path:polygon(4% 0,96% 0,100% 100%,0 100%);background:linear-gradient(90deg,#85241a,#f04f51 18%,#f9c9ca 34%,#a7dbd7 47%,#ffffff 51%,#a7dbd7 57%,#f04f51 78%,#85241a);background-size:220% 100%;will-change:transform,background-position"></div>
+          </sc-for>
+        </div>
+      </div>
+      <div ref="{{ titleRef }}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,1.4vw,12px);padding:0 clamp(18px,5vw,56px) 7vh;text-align:center;pointer-events:none;will-change:transform,opacity">
+        <span style="font-size:clamp(10px,2.6vw,13px);font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#a7dbd7">Artotel Group Leaders Summit 2026</span>
+        <h1 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:clamp(84px,19vw,240px);line-height:0.82;letter-spacing:-0.03em;color:#fff">SHIFT</h1>
+        <span style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(20px,4.2vw,40px);line-height:1.1;color:#fff">Never Stay Still</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isCinematic }}" hint-placeholder-val="{{ false }}">
+      <div ref="{{ parallaxRef }}" style="position:absolute;inset:0;overflow:hidden;background:#341212">
+        <div style="position:absolute;left:68%;top:38%;width:min(78vmax,1100px);aspect-ratio:1;border-radius:50%;background:#f04f51;will-change:transform"></div>
+        <div style="position:absolute;left:14%;top:78%;width:min(42vmax,600px);aspect-ratio:1;border-radius:50%;background:#85241a;will-change:transform"></div>
+        <div style="position:absolute;left:56%;top:13%;width:min(18vmax,260px);aspect-ratio:1;border-radius:50%;background:#85241a;will-change:transform"></div>
+        <div style="position:absolute;left:12%;top:22%;width:min(12vmax,170px);aspect-ratio:1;border-radius:50%;background:transparent;box-shadow:inset 0 0 0 2px #f04f51;box-sizing:border-box;will-change:transform"></div>
+      </div>
+      <div ref="{{ titleRef }}" style="position:absolute;left:0;right:0;bottom:clamp(110px,18vw,140px);padding:0 clamp(18px,5vw,56px);display:flex;flex-direction:column;gap:clamp(6px,1.4vw,12px);pointer-events:none;will-change:transform,opacity">
+        <span style="font-size:clamp(10px,2.6vw,13px);font-weight:600;letter-spacing:0.22em;text-transform:uppercase">Artotel Group Leaders Summit 2026</span>
+        <h1 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:clamp(84px,20vw,260px);line-height:0.82;letter-spacing:-0.03em">SHIFT</h1>
+        <span style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(22px,4.6vw,44px);line-height:1.1">Never Stay Still</span>
+      </div>
+    </sc-if>
+    <div style="position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:clamp(14px,3vw,20px) clamp(18px,5vw,56px) {{ barPadB }};box-sizing:border-box;pointer-events:none;z-index:3;background:{{ barBg }};backdrop-filter:{{ barBlur }};-webkit-backdrop-filter:{{ barBlur }}">
+
+    </div>
+   </div>
+  </section>
+
+  <sc-if value="{{ isWall }}" hint-placeholder-val="{{ true }}">
+    <section id="words" data-screen-label="02 Words" style="padding:clamp(72px,11vw,140px) clamp(18px,5vw,56px);background:#000;color:#fff;border-top:1px solid rgba(255,255,255,0.12);scroll-margin-top:60px">
+      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(28px,5vw,48px)">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:clamp(10px,2.6vw,12px);font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#a7dbd7">What does SHIF+ mean to you?</span>
+            <h2 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:600;font-size:clamp(40px,8vw,96px);line-height:0.95;letter-spacing:-0.04em">Our words</h2>
+          </div>
+          <span style="font-size:clamp(12px,3vw,14px);color:rgba(255,255,255,0.6)">{{ wordCount }}</span>
+        </div>
+        <sc-if value="{{ hasWords }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:clamp(10px,2vw,18px);align-items:center;justify-content:center;padding:clamp(8px,2vw,24px) 0">
+            <sc-for list="{{ wallWords }}" as="w" hint-placeholder-count="6">
+              <span data-shared-word="" style="background:{{ w.bg }};color:{{ w.fg }};font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;font-size:{{ w.size }};letter-spacing:-0.01em;text-transform:uppercase;line-height:1;padding:0.22em 0.45em;transform:rotate({{ w.rot }}) scale({{ w.scale }});box-shadow:{{ w.ring }};transition:transform 0.5s cubic-bezier(.2,.8,.2,1),box-shadow 0.3s">{{ w.t }}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <p role="status" style="margin:0;font-size:13px;color:rgba(255,255,255,0.75)">{{ wordsStatus }}</p>
+        <sc-if value="{{ noWords }}" hint-placeholder-val="{{ true }}">
+          <div style="border:1px dashed rgba(255,255,255,0.3);padding:clamp(32px,6vw,64px);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+            <span style="font-size:clamp(15px,3.6vw,18px);color:rgba(255,255,255,0.75)">No words yet. Be the first to add one.</span>
+            <a href="#top" style="min-height:44px;display:inline-flex;align-items:center;padding:0 20px;background:#f04f51;color:#fff;font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase">Add your word</a>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasWords }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:center">
+            <a href="#top" style="min-height:44px;display:inline-flex;align-items:center;padding:0 20px;border:1px solid rgba(255,255,255,0.4);color:#fff;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase" style-hover="background:#f04f51;border-color:#f04f51;color:#fff">Add another word</a>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+
+  <section data-screen-label="02 About" style="padding:clamp(88px,14vw,180px) clamp(18px,5vw,56px);display:flex;justify-content:center;background:#000">
+    <div style="max-width:1000px;width:100%;display:flex;flex-direction:column;gap:clamp(22px,4vw,36px)">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <span style="background:#f04f51;color:#fff;font-size:clamp(10px,2.4vw,12px);font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:6px 10px;transform:rotate(-3deg)">Never Stay Still</span>
+        <span style="background:#fff;color:#f04f51;font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(14px,3vw,18px);font-weight:700;letter-spacing:-0.02em;line-height:1;padding:6px 12px;border-radius:6px;transform:rotate(2deg)">SHIF+</span>
+      </div>
+      <p style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(26px,5.2vw,56px);line-height:1.18;letter-spacing:-0.01em;text-wrap:pretty">As Artotel Group continues expanding, repositioning, and evolving its brands, Artotel Group Leaders Summit 2026 becomes a platform to align our vision towards the future.</p>
+    </div>
+  </section>
+
+  <section id="lineup" data-screen-label="03 Line Up" style="padding:clamp(64px,10vw,120px) 0;background:#000;color:#fff;border-top:1px solid rgba(255,255,255,0.12)">
+    <div style="display:flex;flex-direction:column;gap:clamp(28px,5vw,52px)">
+      <div style="width:100%;max-width:calc(1240px + 2 * clamp(18px,5vw,56px));box-sizing:border-box;margin:0 auto;padding:0 clamp(18px,5vw,56px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 20px">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
+          <h2 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:clamp(44px,10vw,112px);line-height:0.95;letter-spacing:-0.02em">Line Up</h2>
+          
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onClick="{{ lineupPrev }}" aria-label="Previous speakers" style="width:48px;height:48px;border:1px solid rgba(255,255,255,0.4);background:transparent;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#f04f51;border-color:#f04f51">←</button>
+          <button onClick="{{ lineupNext }}" aria-label="Next speakers" style="width:48px;height:48px;border:1px solid rgba(255,255,255,0.4);background:transparent;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#f04f51;border-color:#f04f51">→</button>
+        </div>
+      </div>
+      <div id="lineup-strip" ref="{{ lineupRef }}" role="region" aria-label="Speaker carousel" tabIndex="{{ 0 }}" style="display:flex;gap:clamp(14px,2.4vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:max(clamp(18px,5vw,56px),calc((100% - 1240px) / 2));padding:0 clamp(18px,5vw,56px) 8px max(clamp(18px,5vw,56px),calc((100% - 1240px) / 2));scrollbar-width:none;-webkit-overflow-scrolling:touch">
+        <sc-for list="{{ speakers }}" as="sp" hint-placeholder-count="8">
+          <div aria-hidden="{{ sp.clone }}" style="flex:0 0 clamp(220px,62vw,300px);scroll-snap-align:start;display:flex;flex-direction:column;gap:12px">
+            <div style="position:relative;aspect-ratio:493/550;width:100%;background:{{ sp.cardBg }}">
+              <image-slot id="{{ sp.slotId }}" shape="rect" src="{{ sp.src }}" fit="{{ sp.fit }}" aria-label="{{ sp.name }}" placeholder="Speaker photo"></image-slot>
+              
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span style="font-size:clamp(15px,3.6vw,18px);font-weight:600">{{ sp.name }}</span>
+              <span style="font-size:clamp(12px,3vw,14px);color:rgba(255,255,255,0.6)">{{ sp.title }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="schedule" data-screen-label="04 Schedule" style="padding:clamp(64px,10vw,120px) clamp(18px,5vw,56px);background:#000;border-top:1px solid rgba(255,255,255,0.12)">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(28px,5vw,48px)">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
+        <h2 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:clamp(44px,10vw,112px);line-height:0.95;letter-spacing:-0.02em">Schedule</h2>
+        
+      </div>
+      <div role="tablist" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.4vw,12px)">
+        <sc-for list="{{ days4 }}" as="day" hint-placeholder-count="3">
+          <button role="tab" onClick="{{ day.pick }}" aria-selected="{{ day.sel }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:clamp(10px,2.4vw,18px);cursor:pointer;text-align:left;font-family:'Space Grotesk',system-ui,sans-serif;border-radius:0;min-height:44px;border:1px solid {{ day.bdNow }};background:{{ day.bgNow }};color:{{ day.fgNow }};transition:background 0.15s,color 0.15s">
+            <span style="font-size:clamp(9px,2.2vw,11px);font-weight:700;letter-spacing:0.16em;text-transform:uppercase">{{ day.label }}</span>
+            <span style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(26px,6vw,52px);line-height:1">{{ day.num }}</span>
+            <span style="font-size:clamp(9px,2.2vw,12px);opacity:0.75">{{ day.weekdayShort }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ schedA }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column">
+        <div style="display:flex;flex-direction:column;border-top:2px solid #fff">
+          <sc-for list="{{ sessions }}" as="se" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:clamp(70px,16vw,104px) 1fr;gap:clamp(12px,3vw,24px);padding:clamp(14px,2.6vw,20px) 0;border-bottom:1px solid rgba(255,255,255,0.18);align-items:baseline">
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(18px,3.6vw,26px);font-variant-numeric:tabular-nums;color:{{ se.timeColor }}">{{ se.time }}</span>
+                <span style="font-size:11px;color:rgba(255,255,255,0.5);font-variant-numeric:tabular-nums">{{ se.end }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px">
+                <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:6px">
+                  <span style="font-size:{{ se.size }};font-weight:{{ se.weight }};color:{{ se.color }};line-height:1.3;text-wrap:pretty">{{ se.title }}</span>
+                  <sc-if value="{{ se.hasLoc }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:clamp(12px,3vw,14px);color:rgba(255,255,255,0.6)">{{ se.loc }}</span>
+                  </sc-if>
+                  <sc-if value="{{ se.hasSpeaker }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;flex-direction:column;gap:10px">
+                      <sc-for list="{{ se.people }}" as="pp" hint-placeholder-count="1">
+                        <div style="display:flex;flex-direction:column;gap:2px">
+                          <span style="font-size:clamp(13px,3.2vw,15px);font-weight:600;color:#fff">{{ pp.name }}</span>
+                          <sc-if value="{{ pp.hasTitle }}" hint-placeholder-val="{{ true }}">
+                            <span style="font-size:clamp(12px,3vw,13px);color:rgba(255,255,255,0.6);text-wrap:pretty">{{ pp.title }}</span>
+                          </sc-if>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ se.hasActions }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:8px">
+                    <sc-if value="{{ se.hasDress }}" hint-placeholder-val="{{ false }}">
+                      <button type="button" onClick="{{ se.openDress }}" style="min-height:44px;display:inline-flex;align-items:center;gap:8px;padding:0 16px;border:1px solid rgba(255,255,255,0.45);background:transparent;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;border-radius:0;transition:background 0.15s,border-color 0.15s" style-hover="background:#f04f51;border-color:#f04f51;color:#fff">Dress Code</button>
+                    </sc-if>
+                    <sc-if value="{{ se.hasDeck }}" hint-placeholder-val="{{ false }}">
+                      <a href="{{ se.deckUrl }}" target="_blank" rel="noopener" style="min-height:44px;display:inline-flex;align-items:center;gap:8px;padding:0 16px;background:#fff;border:1px solid #fff;color:#341212;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;transition:background 0.15s,color 0.15s" style-hover="background:#f04f51;border-color:#f04f51;color:#fff">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+                        Materials
+                      </a>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ schedB }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;border-top:2px solid #fff">
+          <sc-if value="{{ notMobile }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:140px minmax(0,1.3fr) minmax(0,1fr) 200px;gap:24px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.18)">
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">Time</span>
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">Session</span>
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">Speaker</span>
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">Remarks</span>
+            </div>
+          </sc-if>
+          <sc-for list="{{ sessions }}" as="se" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:{{ schedCols }};gap:{{ schedGap }};padding:clamp(18px,2.6vw,24px) 0;border-bottom:1px solid rgba(255,255,255,0.18);align-items:start">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <span style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(17px,3.6vw,20px);font-variant-numeric:tabular-nums;color:{{ se.timeColor }}">{{ se.range }}</span>
+                <sc-if value="{{ se.hasLoc }}" hint-placeholder-val="{{ false }}">
+                  <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;line-height:1.35;color:#a7dbd7"><svg width="11" height="13" viewBox="0 0 11 13" fill="none" style="flex:none"><path d="M5.5 12s4.5-4.2 4.5-7.2A4.5 4.5 0 0 0 1 4.8C1 7.8 5.5 12 5.5 12Z" stroke="currentColor" stroke-width="1.3"></path><circle cx="5.5" cy="4.8" r="1.5" fill="currentColor"></circle></svg>{{ se.loc }}</span>
+                </sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">Session</span></sc-if>
+                <span style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:{{ se.size }};font-weight:500;line-height:1.25;color:{{ se.color }};text-wrap:pretty">{{ se.title }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+                <sc-if value="{{ se.hasSpeaker }}" hint-placeholder-val="{{ true }}">
+                  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">{{ se.speakerLabel }}</span></sc-if>
+                  <sc-for list="{{ se.people }}" as="pp" hint-placeholder-count="1">
+                    <sc-if value="{{ pp.isLogo }}" hint-placeholder-val="{{ false }}">
+                      <img src="{{ pp.logo }}" alt="{{ pp.name }}" style="height:18px;width:auto;align-self:flex-start;object-fit:contain">
+                    </sc-if>
+                    <sc-if value="{{ pp.notLogo }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <div style="flex:none;width:44px;height:44px;border-radius:50%;overflow:hidden;background:#a7dbd7;display:flex;align-items:center;justify-content:center;color:#341212;font-size:14px;font-weight:700">
+                        <sc-if value="{{ pp.hasImg }}" hint-placeholder-val="{{ false }}">
+                          <img src="{{ pp.img }}" alt="{{ pp.name }}" style="width:100%;height:100%;object-fit:cover;object-position:top">
+                        </sc-if>
+                        <sc-if value="{{ pp.noImg }}" hint-placeholder-val="{{ true }}">
+                          <span>{{ pp.initials }}</span>
+                        </sc-if>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                        <span style="font-size:14px;font-weight:600;color:#fff">{{ pp.name }}</span>
+                        <sc-if value="{{ pp.hasTitle }}" hint-placeholder-val="{{ true }}">
+                          <span style="font-size:12px;line-height:1.4;color:rgba(255,255,255,0.6);text-wrap:pretty">{{ pp.title }}</span>
+                        </sc-if>
+                      </div>
+                    </div>
+                    </sc-if>
+                  </sc-for>
+                </sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                <sc-if value="{{ se.hasDress }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onClick="{{ se.openDress }}" style="align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border:1px solid rgba(255,255,255,0.45);background:transparent;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border-radius:0;transition:background 0.15s,border-color 0.15s" style-hover="background:#f04f51;border-color:#f04f51;color:#fff">Dress Code</button>
+                </sc-if>
+                <sc-if value="{{ se.hasDeck }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ se.deckUrl }}" target="_blank" rel="noopener" style="align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;background:#fff;border:1px solid #fff;color:#341212;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;transition:background 0.15s,color 0.15s" style-hover="background:#f04f51;border-color:#f04f51;color:#fff">Materials</a>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section id="gallery" data-screen-label="05 Gallery" style="padding:clamp(64px,10vw,120px) clamp(18px,5vw,56px);background:#000;color:#fff;border-top:1px solid rgba(255,255,255,0.12)">
+    <div style="width:100%;max-width:1440px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(28px,5vw,52px);box-sizing:border-box">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
+        <h2 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:clamp(44px,10vw,112px);line-height:0.95;letter-spacing:-0.02em">Gallery</h2>
+        <span style="background:#f04f51;color:#fff;font-size:clamp(10px,2.4vw,12px);font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:6px 10px;transform:rotate(-2deg)">Artotel Group Leaders Summit 2023 &amp; 2024</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <p style="margin:0;max-width:640px;font-size:clamp(15px,3.6vw,18px);line-height:1.5;color:rgba(255,255,255,0.75);text-wrap:pretty">Every summit leaves its mark. Look back on the faces, stages and late nights of 2023 and 2024. When each day of AGLS 2026 wraps, its album lands right here.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:clamp(8px,1.6vw,12px)">
+          <sc-for list="{{ albums }}" as="al" hint-placeholder-count="3">
+            <a href="{{ al.href }}" target="_blank" rel="noopener" aria-disabled="{{ al.disabled }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 18px;border:1px solid {{ al.border }};background:{{ al.bg }};color:{{ al.fg }};pointer-events:{{ al.pe }};text-decoration:none">
+              <span style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase">{{ al.label }}</span>
+                <span style="font-size:12px;opacity:0.7">{{ al.note }}</span>
+              </span>
+              <span style="font-size:18px">{{ al.arrow }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+      <div id="gallery-strip" role="region" aria-label="Gallery photos" tabIndex="{{ 0 }}" onScroll="{{ galleryScroll }}" style="display:grid;width:100%;max-width:1360px;margin:0 auto;box-sizing:border-box;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(135px,11vw,175px);grid-auto-flow:dense;gap:clamp(10px,1vw,14px)">
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="7">
+          <div style="position:relative;min-width:0;min-height:0;height:100%;overflow:hidden;background:#141414;grid-row:{{ g.rowSpan }};grid-column:{{ g.colSpan }}">
+            <image-slot id="{{ g.slotId }}" shape="rect" fit="cover" src="{{ g.src }}" placeholder="Drop a photo" style="display:block;width:100%;height:100%"></image-slot>
+          </div>
+        </sc-for>
+      </div>
+      <div id="gallery-controls" aria-label="Gallery navigation">
+        <button type="button" aria-label="Previous gallery photo" aria-controls="gallery-strip" onClick="{{ galleryPrev }}" disabled="{{ galleryAtStart }}">‹</button>
+        <span style="font-size:12px;text-align:center;color:rgba(255,255,255,.75)"><span aria-live="polite">{{ galleryPosition }}</span><br>Swipe left or right</span>
+        <button type="button" aria-label="Next gallery photo" aria-controls="gallery-strip" onClick="{{ galleryNext }}" disabled="{{ galleryAtEnd }}">›</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" data-screen-label="06 Contact" style="padding:clamp(64px,10vw,120px) clamp(18px,5vw,56px);background:#000;color:#fff;border-top:1px solid rgba(255,255,255,0.12)">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(28px,5vw,48px)">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
+        <h2 style="margin:0;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:clamp(44px,10vw,112px);line-height:0.95;letter-spacing:-0.02em">Contact Us</h2>
+        
+      </div>
+      
+      <div style="display:flex">
+        <a href="https://wa.me/628119220911" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:0 28px;background:#f04f51;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:background 0.15s" style-hover="background:#85241a;color:#fff">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"></path></svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="support" data-screen-label="07 Supported By" style="padding:clamp(32px,5vw,56px) clamp(18px,5vw,56px);background:#000;color:#fff;border-top:1px solid rgba(255,255,255,0.12)">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.6)">Supported By</span>
+      <div style="display:flex;align-items:center;gap:{{ spGapX }};width:100%">
+        <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/bni.png" alt="BNI" style="height:{{ spK343 }};max-width:100%;object-fit:contain"></div>
+        <div style="flex:none;width:1px;height:{{ spSepH }};background:rgba(255,255,255,0.2)"></div>
+        <div id="sp-viewport" style="flex:1;min-width:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
+          <div id="sp-track" style="display:flex;align-items:center;gap:{{ spGapX }};width:max-content;will-change:transform">
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/iforte.png" alt="iForte" style="height:{{ spK297 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/zees.png" alt="Zees" style="height:{{ spK480 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/aqua.png" alt="Tirta Investama – Danone Group" style="height:{{ spK406 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/purezza.png" alt="Purezza – Air Indonesia Maju" style="height:{{ spK352 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/bja.png" alt="PT. Budi Jaya Amenities" style="height:{{ spK532 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/avanti.png" alt="PT. Avanti Persada Utama" style="height:{{ spK549 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/mastrada.png" alt="Mastrada" style="height:{{ spK344 }};max-width:100%;object-fit:contain"></div>
+<div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center">
+  <img
+    src="assets/sp/SEG.png"
+    alt="SEG"
+    style="display:block;width:auto;height:auto;max-width:70%;max-height:45%;object-fit:contain"
+  />
+</div>            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/varnion.png" alt="Varnion" style="height:{{ spK392 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/ventaza.png" alt="Ventaza – PT Personalized Business Solution" style="height:{{ spK500 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/gfb.png" alt="Grab" style="height:{{ spK192 }};max-width:100%;object-fit:contain"></div>
+            <div style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/lg.png" alt="LG" style="height:{{ spK423 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/iforte.png" alt="iForte" style="height:{{ spK297 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/zees.png" alt="Zees" style="height:{{ spK480 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/aqua.png" alt="Tirta Investama – Danone Group" style="height:{{ spK406 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/purezza.png" alt="Purezza – Air Indonesia Maju" style="height:{{ spK352 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/bja.png" alt="PT. Budi Jaya Amenities" style="height:{{ spK532 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/avanti.png" alt="PT. Avanti Persada Utama" style="height:{{ spK549 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/mastrada.png" alt="Mastrada" style="height:{{ spK344 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/loka.png" alt="Loka Bespoke Tailor" style="height:{{ spK337 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/varnion.png" alt="Varnion" style="height:{{ spK392 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/ventaza.png" alt="Ventaza – PT Personalized Business Solution" style="height:{{ spK500 }};max-width:100%;object-fit:contain"></div>
+            
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/gfb.png" alt="Grab" style="height:{{ spK192 }};max-width:100%;object-fit:contain"></div>
+            <div aria-hidden="true" style="flex:none;width:{{ spW }};height:{{ spH }};display:flex;align-items:center;justify-content:center"><img src="assets/sp/lg.png" alt="LG" style="height:{{ spK423 }};max-width:100%;object-fit:contain"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#000;border-top:1px solid rgba(255,255,255,0.14);padding:clamp(16px,4vw,24px) clamp(18px,5vw,56px) {{ footPadB }};display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;justify-content:space-between">
+    <span style="font-size:clamp(11px,3vw,14px);white-space:nowrap">24–26 NOVEMBER 2026</span>
+    <span style="font-size:clamp(11px,3vw,14px);white-space:nowrap">© 2026 Artotel Group</span>
+  </footer>
+
+  <sc-if value="{{ dressOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="Dress code" onClick="{{ closeDress }}" style="position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:clamp(12px,4vw,40px)">
+      <div onClick="{{ stopProp }}" style="position:relative;width:min(100%,720px);max-height:100%;display:flex;flex-direction:column;background:#000;border:1px solid rgba(255,255,255,0.2);color:#fff;font-family:'Space Grotesk',system-ui,sans-serif">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:clamp(16px,3vw,24px)">
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <span style="align-self:flex-start;background:#f04f51;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:4px 8px">Dress Code · {{ dressDay }}</span>
+            <span style="font-size:clamp(18px,4.4vw,24px);font-weight:600;line-height:1.2;text-wrap:pretty">{{ dressTitle }}</span>
+          </div>
+          <button type="button" onClick="{{ closeDress }}" aria-label="Close" style="flex:0 0 auto;width:44px;height:44px;border:1px solid rgba(255,255,255,0.4);background:transparent;color:#fff;font-size:20px;line-height:1;cursor:pointer;border-radius:0" style-hover="background:#f04f51;border-color:#f04f51">×</button>
+        </div>
+        <sc-if value="{{ dressHasLook }}" hint-placeholder-val="{{ false }}">
+          <div style="overflow-y:auto;display:flex;flex-direction:column;gap:clamp(16px,3vw,24px);padding:0 clamp(16px,3vw,24px) clamp(16px,3vw,24px)">
+            <div style="display:grid;grid-template-columns:{{ dressCols }};justify-content:center;gap:8px">
+              <sc-for list="{{ dressImgs }}" as="im" hint-placeholder-count="3">
+                <img src="{{ im.src }}" alt="{{ im.alt }}" style="width:100%;aspect-ratio:{{ im.ratio }};object-fit:cover;display:block;background:#e9e9e9">
+              </sc-for>
+            </div>
+            <sc-for list="{{ dressGroups }}" as="g" hint-placeholder-count="1">
+              <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(255,255,255,0.2);padding-top:clamp(14px,2.5vw,20px)">
+                <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.7)">{{ g.label }}</span>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 24px;font-size:clamp(15px,3.6vw,17px);line-height:1.4">
+                  <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="4">
+                    <span style="display:flex;gap:10px"><span style="color:#f04f51">—</span>{{ it }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ dressNoLook }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;width:100%;aspect-ratio:4/5;max-height:70vh;background:#141414">
+            <image-slot id="{{ dressSlot }}" shape="rect" placeholder="Drop the dress code image for this session"></image-slot>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Divider video&quot;,&quot;Video + words&quot;,&quot;Logo + words&quot;,&quot;Scroll story&quot;,&quot;Motion graphic&quot;,&quot;Film&quot;,&quot;Supergraphic&quot;,&quot;Kinetic tags&quot;],&quot;default&quot;:&quot;Divider video&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroVideo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;],&quot;default&quot;:&quot;1&quot;,&quot;tsType&quot;:&quot;'1'|'2'|'3'&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;showWordInput&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;showWordWall&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;interactive&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;White&quot;,&quot;Black&quot;,&quot;Blue&quot;],&quot;default&quot;:&quot;White&quot;,&quot;tsType&quot;:&quot;'White'|'Black'|'Blue'&quot;,&quot;section&quot;:&quot;Hero (Kinetic)&quot;},&quot;speakerCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:16,&quot;min&quot;:2,&quot;max&quot;:16,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Line Up&quot;}}">
+class Component extends DCLogic {
+  static BIG = [
+    { t: 'Never', bg: '#f04f51', fg: '#fff', x: 22, y: 22, r: -7 },
+    { t: 'Stay', bg: '#a7dbd7', fg: '#341212', x: 52, y: 15, r: 5 },
+    { t: 'Still', bg: '#a7dbd7', fg: '#341212', x: 80, y: 26, r: -3 }
+  ];
+  static SMALL = [
+    { t: 'Expanding', bg: '#f04f51', fg: '#000', x: 9, y: 44, r: -4 },
+    { t: 'Repositioning', bg: '#a7dbd7', fg: '#341212', x: 16, y: 72, r: 3 },
+    { t: 'Evolving', bg: '#85241a', fg: '#fff', x: 86, y: 46, r: 5 },
+    { t: 'Align', bg: '#000', fg: '#fff', x: 34, y: 86, r: -2 },
+    { t: 'Vision', bg: '#fff2e9', fg: '#85241a', x: 64, y: 82, r: 4 },
+    { t: 'Future', bg: '#f04f51', fg: '#fff', x: 82, y: 70, r: -5 },
+    { t: 'Leaders', bg: '#85241a', fg: '#fff', x: 6, y: 12, r: 3 },
+    { t: 'Brands', bg: '#a7dbd7', fg: '#85241a', x: 93, y: 10, r: -3 },
+    { t: 'Platform', bg: '#a7dbd7', fg: '#000', x: 40, y: 34, r: 2 },
+    { t: 'Together', bg: '#f04f51', fg: '#000', x: 66, y: 36, r: -4 },
+    { t: 'Momentum', bg: '#341212', fg: '#fff', x: 92, y: 88, r: 3 },
+    { t: 'Forward', bg: '#f04f51', fg: '#fff', x: 4, y: 90, r: -3 }
+  ];
+  static Field = class extends React.Component {
+    constructor(p) {
+      super(p);
+      this.root = React.createRef();
+      this.els = [];
+      this.items = [];
+      this.ptr = { x: -9999, y: -9999 };
+    }
+    componentDidMount() {
+      const all = Component.BIG.map((d) => ({ ...d, big: true })).concat(Component.SMALL.map((d) => ({ ...d, big: false })));
+      const now = performance.now();
+      this.items = all.map((d, i) => ({ ...d, ox: 0, oy: -(window.innerHeight + 300), vx: 0, vy: 0, start: now + (d.big ? i * 180 : 500 + i * 70) }));
+      this.onMove = (e) => {
+        const r = this.root.current.getBoundingClientRect();
+        const p = e.touches ? e.touches[0] : e;
+        this.ptr = { x: p.clientX - r.left, y: p.clientY - r.top };
+      };
+      this.onLeave = () => { this.ptr = { x: -9999, y: -9999 }; };
+      window.addEventListener('pointermove', this.onMove, { passive: true });
+      window.addEventListener('touchmove', this.onMove, { passive: true });
+      document.addEventListener('pointerleave', this.onLeave);
+      this.last = 0;
+      const run = (t) => { this.last = performance.now(); this.step(t); };
+      const loop = (t) => { run(t); this.raf = requestAnimationFrame(loop); };
+      this.raf = requestAnimationFrame(loop);
+      this.fb = setInterval(() => { if (performance.now() - this.last > 60) run(performance.now()); }, 33);
+    }
+    componentWillUnmount() {
+      cancelAnimationFrame(this.raf); clearInterval(this.fb);
+      window.removeEventListener('pointermove', this.onMove);
+      window.removeEventListener('touchmove', this.onMove);
+      document.removeEventListener('pointerleave', this.onLeave);
+    }
+    step(t) {
+      const root = this.root.current;
+      if (!root) return;
+      const W = root.clientWidth, H = root.clientHeight;
+      const scat = Math.min(1, Math.max(0, window.scrollY / (H * 0.9)));
+      const interactive = this.props.interactive;
+      const mobile = W < 640;
+      this.items.forEach((it, i) => {
+        const el = this.els[i];
+        if (!el) return;
+        if (!it.big && mobile && i % 2 === 1) { el.style.display = 'none'; return; }
+        el.style.display = '';
+        if (t < it.start) { el.style.transform = 'translate(-50%,-50%) translate(0px,' + it.oy + 'px)'; return; }
+        const top = mobile ? 64 : 76, bot = mobile ? 120 : 110;
+        const hw = (el.offsetWidth || 0) / 2 + 12;
+        const hx = Math.min(W - hw, Math.max(hw, it.x / 100 * W));
+        const hy = top + it.y / 100 * (H - top - bot);
+        const tx = (hx - W / 2) * scat * 0.9, ty = (hy - H / 2) * scat * 0.9 - scat * 40;
+        let ax = (tx - it.ox) * 0.045 - it.vx * 0.16;
+        let ay = (ty - it.oy) * 0.045 - it.vy * 0.16;
+        if (interactive) {
+          const dx = hx + it.ox - this.ptr.x, dy = hy + it.oy - this.ptr.y;
+          const d = Math.hypot(dx, dy), R = it.big ? 220 : 150;
+          if (d < R && d > 0.1) { const f = (1 - d / R) * (it.big ? 3.2 : 2.4); ax += dx / d * f; ay += dy / d * f; }
+        }
+        it.vx += ax; it.vy += ay; it.ox += it.vx; it.oy += it.vy;
+        const fl = Math.sin(t / 1300 + i * 1.7) * (it.big ? 5 : 3);
+        const rot = it.r + Math.max(-14, Math.min(14, it.vx * 0.9));
+        el.style.transform = 'translate(-50%,-50%) translate(' + it.ox.toFixed(1) + 'px,' + (it.oy + fl).toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg)';
+      });
+    }
+    render() {
+      const h = React.createElement;
+      const all = Component.BIG.map((d) => ({ ...d, big: true })).concat(Component.SMALL.map((d) => ({ ...d, big: false })));
+      return h('div', { ref: this.root, style: { position: 'absolute', inset: 0, overflow: 'hidden', touchAction: 'pan-y' } },
+        h('div', { style: { position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 1 } },
+          h('h1', { style: { margin: 0, marginTop: '8vh', fontFamily: "'Space Grotesk', system-ui, sans-serif", fontWeight: 400, fontSize: 'clamp(104px, 27vw, 400px)', lineHeight: 0.8, letterSpacing: '-0.03em', color: this.props.ink } }, 'SHIFT')
+        ),
+        all.map((d, i) => h('span', {
+          key: d.t, ref: (el) => { this.els[i] = el; },
+          style: {
+            position: 'absolute', left: d.x + '%', top: d.y + '%', zIndex: d.big ? 2 : 0,
+            transform: 'translate(-50%,-50%) translateY(-120vh)', willChange: 'transform',
+            background: d.bg, color: d.fg, whiteSpace: 'nowrap', userSelect: 'none',
+            boxShadow: d.bg === '#fff2e9' || d.bg === '#a7dbd7' ? 'inset 0 0 0 1px rgba(0,0,0,0.06)' : 'none',
+            ...(d.big
+              ? { fontFamily: "'Space Grotesk', system-ui, sans-serif", fontWeight: 600, fontSize: 'clamp(40px, 9.5vw, 128px)', lineHeight: 1, letterSpacing: '-0.03em', padding: '0.06em 0.2em 0.12em' }
+              : { fontFamily: "'Space Grotesk', system-ui, sans-serif", fontWeight: 700, fontSize: 'clamp(9px, 1.5vw, 13px)', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '5px 8px' })
+          }
+        }, d.t))
+      );
+    }
+  };
+  static TAGS = ['Expanding','Repositioning','Evolving','Align','Vision','Future','Leaders','Brands','Platform','Together','Momentum','Forward','Growth','Culture','Hospitality','Wondrous','People','Purpose','Ideas','Change','Bold','Craft','Journey','One Group'];
+  static FILLS = [['#ffffff','#f04f51'],['#a7dbd7','#341212'],['#f04f51','#000'],['#a7dbd7','#341212'],['#fff2e9','#85241a'],['#85241a','#fff'],['#85241a','#fff']];
+  static Story = class extends React.Component {
+    constructor(p) {
+      super(p);
+      this.root = React.createRef(); this.big = []; this.small = []; this.lines = []; this.corners = [];
+      this.blocks = [];
+      this.card = React.createRef(); this.cardIn = React.createRef(); this.bg = React.createRef();
+      this.ptr = { x: -9999, y: -9999 };
+      let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+      const cells = [];
+      [16, 30, 44, 58, 72].forEach((cy) => [9, 25, 41, 59, 75, 91].forEach((cx) => { if (!((cx === 41 || cx === 59) && cy >= 30)) cells.push([cx, cy]); }));
+      this.tags = Component.TAGS.slice(0, cells.length).map((t, i) => {
+        const c = cells[(i * 7) % cells.length];
+        const x = c[0] + (rnd() - 0.5) * 6, y = c[1] + (rnd() - 0.5) * 5;
+        const fl = Component.FILLS[i % Component.FILLS.length];
+        return { t, x, y, bg: fl[0], fg: fl[1], r: (rnd() - 0.5) * 8, big: rnd() > 0.7, ox: 0, oy: 0, vx: 0, vy: 0 };
+      });
+      if (p.mode === 'logo') this.tags = [];
+      this.words = p.mode === 'logo' ? [] : [
+        { t: 'Never', bg: '#f04f51', fg: '#fff', x: 22, y: 34, r: -7, dx: -0.6 },
+        { t: 'Stay', bg: '#a7dbd7', fg: '#341212', x: 51, y: 24, r: 5, dx: 0.1 },
+        { t: 'Still', bg: '#a7dbd7', fg: '#341212', x: 79, y: 38, r: -4, dx: 0.7 }
+      ].map((w) => ({ ...w, oy: -1200, vy: 0 }));
+    }
+    addWord(t, from, recordId = null) {
+      const W = this.root.current ? this.root.current.clientWidth : 1000, H = this.root.current ? this.root.current.clientHeight : 700;
+      const fl = Component.FILLS[(this.tags.length + 3) % Component.FILLS.length];
+      const rr = this.root.current ? this.root.current.getBoundingClientRect() : { left: 0, top: 0 };
+      const toLocal = (r) => ({ l: r.left - rr.left, t: r.top - rr.top, r: r.right - rr.left, b: r.bottom - rr.top });
+      const avoid = [];
+      this.big.forEach((el) => { if (el && el.style.opacity !== '0') avoid.push(toLocal(el.getBoundingClientRect())); });
+      const inp = document.getElementById('shift-word'), form = inp && inp.closest('form');
+      if (form) avoid.push(toLocal(form.getBoundingClientRect()));
+      const lk = document.getElementById('hero-lockup');
+      if (lk) avoid.push(toLocal(lk.getBoundingClientRect()));
+      this.tags.forEach((o, j) => { if (o.user && this.small[j]) avoid.push(toLocal(this.small[j].getBoundingClientRect())); });
+      const tw = t.length * (W < 640 ? 13 : 17) + 32, th = W < 640 ? 36 : 44, pad = 10;
+      const navB = W < 640 ? 64 : 72, botLim = form ? toLocal(form.getBoundingClientRect()).t - 8 : H - 190;
+      let x = 50, y = 50, best = null;
+      for (let n = 0; n < 120; n++) {
+        const cx = tw / 2 + pad + Math.random() * Math.max(1, W - tw - pad * 2);
+        const cy = navB + th / 2 + pad + Math.random() * Math.max(1, botLim - navB - th - pad * 2);
+        const box = { l: cx - tw / 2 - pad, r: cx + tw / 2 + pad, t: cy - th / 2 - pad, b: cy + th / 2 + pad };
+        const hits = avoid.filter((a) => !(box.r < a.l || box.l > a.r || box.b < a.t || box.t > a.b)).length;
+        if (!best || hits < best.hits) best = { cx, cy, hits };
+        if (hits === 0) break;
+      }
+      x = best.cx / W * 100; y = best.cy / H * 100;
+      const startX = from ? from.x : W / 2, startY = from ? from.y : H * 0.8;
+      this.uid = (this.uid || 0) + 1;
+      const it = { t, recordId, x, y, bg: fl[0], fg: fl[1], r: (Math.random() - 0.5) * 10, big: true, user: true, uid: this.uid, vx: 0, vy: -6, born: performance.now() };
+      it.ox = startX - x / 100 * W; it.oy = startY - y / 100 * H;
+      this.tags.push(it);
+      const users = this.tags.filter((x) => x.user);
+      if (users.length > 12) this.tags.splice(this.tags.indexOf(users[0]), 1);
+      this.forceUpdate();
+    }
+    componentDidMount() {
+      this.t0 = performance.now();
+      if (this.props.onReady) this.props.onReady(this);
+      this.onMove = (e) => { const r = this.root.current.getBoundingClientRect(); this.ptr = { x: e.clientX - r.left, y: e.clientY - r.top }; };
+      this.onLeave = () => { this.ptr = { x: -9999, y: -9999 }; };
+      window.addEventListener('pointermove', this.onMove, { passive: true });
+      document.addEventListener('pointerleave', this.onLeave);
+      this.last = 0;
+      const run = (t) => { this.last = performance.now(); try { this.step(t); } catch (e) { if (!this.err) { this.err = 1; console.error(e); } } };
+      const loop = (t) => { run(t); this.raf = requestAnimationFrame(loop); };
+      this.raf = requestAnimationFrame(loop);
+      this.fb = setInterval(() => { if (performance.now() - this.last > 60) run(performance.now()); }, 33);
+    }
+    componentWillUnmount() { cancelAnimationFrame(this.raf); clearInterval(this.fb); window.removeEventListener('pointermove', this.onMove); document.removeEventListener('pointerleave', this.onLeave); }
+    step(t) {
+      const root = this.root.current; if (!root) return;
+      const sec = root.closest('section'); if (!sec) return;
+      const W = root.clientWidth, H = root.clientHeight, mobile = W < 640;
+      const rr = sec.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, -rr.top / Math.max(1, rr.height - window.innerHeight)));
+      const sm = (a, b) => { const x = Math.min(1, Math.max(0, (p - a) / (b - a))); return x * x * (3 - 2 * x); };
+      const k = (t - this.t0) / 1000;
+      const logo = this.props.mode === 'logo';
+      const dark = sm(0.2, 0.4);
+      this.bg.current.style.background = '#000';
+      if (!logo) {
+      this.blocks.forEach((el, i) => {
+        if (!el) return;
+        const e = sm(0.18 + i * 0.05, 0.36 + i * 0.05);
+        el.style.transform = 'translateY(' + ((1 - e) * 101).toFixed(2) + '%)';
+      });
+      const ink = '#fff';
+      sec.style.color = ink;
+      const nav = document.querySelector('nav'); if (nav) nav.style.color = (rr.bottom <= 60) ? '#fff' : ink;
+      // big words: drop in on load, fly out on scroll
+      const ex = sm(0.08, 0.34);
+      this.words.forEach((w, i) => {
+        const el = this.big[i]; if (!el) return;
+        if (k < 0.25 + i * 0.18) { el.style.transform = 'translate(-50%,-50%) translateY(-120vh)'; return; }
+        w.vy += (0 - w.oy) * 0.05 - w.vy * 0.17; w.oy += w.vy;
+        const fl = Math.sin(k * 0.8 + i * 1.7) * 6;
+        const hh = (el.offsetHeight || 0) / 2, navB = mobile ? 64 : 72, barT = H - (mobile ? 270 : 168);
+        const homeY = Math.min(barT - hh, Math.max(navB + hh + 8, navB + w.y / 100 * (barT - navB)));
+        const x = w.dx * W * ex, y = (homeY - w.y / 100 * H) + w.oy + fl - ex * H * 0.9;
+        el.style.transform = 'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + (w.r + w.vy * 0.4 + ex * w.dx * 40).toFixed(2) + 'deg)';
+        el.style.opacity = String(1 - sm(0.28, 0.36));
+      });
+      // card
+      const S = Math.min(W * (mobile ? 0.74 : 0.34), H * 0.5, 440);
+      const g = sm(0.42, 0.66), cs = S * g;
+      const cx = W / 2, cy = H * 0.48;
+      const card = this.card.current;
+      card.style.width = cs + 'px'; card.style.height = cs + 'px';
+      card.style.left = (cx - cs / 2) + 'px'; card.style.top = (cy - cs / 2) + 'px';
+      card.style.opacity = g > 0.01 ? '1' : '0';
+      this.cardIn.current.style.opacity = String(sm(0.62, 0.74));
+      const lo = sm(0.38, 0.55) * 0.22;
+      const L = [[cx - cs / 2, 'v'], [cx + cs / 2, 'v'], [cy - cs / 2, 'h'], [cy + cs / 2, 'h']];
+      this.lines.forEach((el, i) => {
+        if (!el) return;
+        const [pos, o] = L[i];
+        el.style.opacity = String(lo);
+        if (o === 'v') { el.style.left = pos + 'px'; } else { el.style.top = pos + 'px'; }
+      });
+      const C = [[cx - cs / 2, cy - cs / 2], [cx + cs / 2, cy - cs / 2], [cx - cs / 2, cy + cs / 2], [cx + cs / 2, cy + cs / 2]];
+      const q = Math.max(10, Math.min(22, S * 0.05));
+      this.corners.forEach((el, i) => {
+        if (!el) return;
+        el.style.width = q + 'px'; el.style.height = q + 'px';
+        el.style.transform = 'translate(' + (C[i][0] - q / 2).toFixed(1) + 'px,' + (C[i][1] - q / 2).toFixed(1) + 'px) scale(' + sm(0.4 + i * 0.02, 0.5 + i * 0.02).toFixed(3) + ')';
+      });
+      }
+      const cx = W / 2, cy = H * 0.48;
+      // small tags
+      const spread = logo ? 0 : sm(0.78, 1) * 0.3;
+      this.tags.forEach((it, i) => {
+        const el = this.small[i]; if (!el) return;
+        if (mobile && i % 2 && !it.user) { el.style.display = 'none'; return; }
+        el.style.display = '';
+        const a = 0.34 + (i % 12) * 0.012;
+        const sc = it.user ? Math.min(1, (performance.now() - it.born) / 400) : sm(a, a + 0.08);
+        const hw = (el.offsetWidth || 0) / 2 + 8;
+        const hx = Math.min(W - hw, Math.max(hw, it.x / 100 * W)), hy = it.y / 100 * H;
+        const tx = (hx - cx) * spread * 0.25, ty = (hy - cy) * spread * 0.25;
+        let ax = (tx - it.ox) * 0.05 - it.vx * 0.18, ay = (ty - it.oy) * 0.05 - it.vy * 0.18;
+        if (this.props.interactive) {
+          const dx = hx + it.ox - this.ptr.x, dy = hy + it.oy - this.ptr.y, d = Math.hypot(dx, dy), R = 140;
+          if (d < R && d > 0.1) { const fz = (1 - d / R) * 2.6; ax += dx / d * fz; ay += dy / d * fz; }
+        }
+        it.vx += ax; it.vy += ay; it.ox += it.vx; it.oy += it.vy;
+        const fl = Math.sin(k * 0.9 + i * 2.1) * 4;
+        el.style.opacity = String(sc);
+        const hh = (el.offsetHeight || 0) / 2 + 6;
+        const top = (mobile ? 64 : 72) + hh;
+        let bot = H - (mobile ? 270 : 168) - hh;
+        if (it.user) { const inp = document.getElementById('shift-word'), fm = inp && inp.closest('form'); if (fm) bot = Math.min(bot, fm.getBoundingClientRect().top - root.getBoundingClientRect().top - hh - 8); }
+        const fx = Math.min(W - hw, Math.max(hw, hx + it.ox));
+        const fy = Math.min(bot, Math.max(top, hy + it.oy + fl));
+        el.style.transform = 'translate(-50%,-50%) translate(' + fx.toFixed(1) + 'px,' + fy.toFixed(1) + 'px) rotate(' + (it.r + it.vx * 0.8).toFixed(2) + 'deg) scale(' + (0.4 + 0.6 * sc).toFixed(3) + ')';
+      });
+    }
+    render() {
+      const h = React.createElement;
+      const sans = "'Space Grotesk', system-ui, sans-serif", serif = "'Space Grotesk', system-ui, sans-serif";
+      const cornerFills = ['#f04f51', '#a7dbd7', '#f04f51', '#a7dbd7'];
+      const L = this.props.mode === 'logo';
+      return h('div', { ref: this.root, style: { position: 'absolute', inset: 0, overflow: 'hidden', touchAction: 'pan-y' } },
+        h('div', { ref: this.bg, style: { position: 'absolute', inset: 0, background: '#000' } }),
+        L ? null : h('div', { style: { position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', overflow: 'hidden' } },
+          ['#85241a', '#f04f51', '#85241a'].map((c, i) => h('div', { key: 'b' + i, ref: (el) => { this.blocks[i] = el; }, style: { background: c, transform: 'translateY(101%)', willChange: 'transform' } }))
+        ),
+        L ? null : h('div', { ref: (el) => { this.blocks[3] = el; }, style: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '6px', background: 'linear-gradient(90deg,#f04f51,#f9c9ca,#a7dbd7,#ffffff,#a7dbd7,#f04f51)', transform: 'translateY(101%)' } }),
+        L ? null : [0, 1].map((i) => h('div', { key: 'v' + i, ref: (el) => { this.lines[i] = el; }, style: { position: 'absolute', top: 0, bottom: 0, width: 1, background: '#fff', opacity: 0 } })),
+        L ? null : [2, 3].map((i) => h('div', { key: 'h' + i, ref: (el) => { this.lines[i] = el; }, style: { position: 'absolute', left: 0, right: 0, height: 1, background: '#fff', opacity: 0 } })),
+        this.tags.map((d, i) => h('span', { key: (d.user ? 'u-' + d.uid : d.t), ref: (el) => { this.small[i] = el; }, style: {
+          position: 'absolute', left: 0, top: 0, opacity: 0, willChange: 'transform,opacity', whiteSpace: 'nowrap', userSelect: 'none',
+          background: d.bg, color: d.fg, fontFamily: sans, fontWeight: 700, fontSize: d.user ? 'clamp(16px,2.6vw,26px)' : (d.big ? 'clamp(10px,1.4vw,14px)' : 'clamp(8px,1vw,10px)'), letterSpacing: d.user ? '0.02em' : '0.14em', textTransform: 'uppercase', padding: d.user ? '6px 12px' : (d.big ? '5px 9px' : '3px 6px'), zIndex: d.user ? 5 : 'auto',
+          boxShadow: d.user ? '0 0 0 2px #fff' : 'none'
+        } }, d.t)),
+        L ? null : h('div', { ref: this.card, style: { position: 'absolute', left: '50%', top: '48%', width: 0, height: 0, background: '#f04f51', color: '#fff', opacity: 0, overflow: 'hidden', zIndex: 2, containerType: 'inline-size' } },
+          h('div', { ref: this.cardIn, style: { position: 'absolute', inset: 0, padding: '7cqw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', opacity: 0, boxSizing: 'border-box' } },
+            h('div', { style: { display: 'flex', flexDirection: 'column', fontFamily: "'Space Grotesk', system-ui, sans-serif", fontWeight: 600, letterSpacing: '-0.04em', lineHeight: 0.92 } },
+              h('div', { style: { display: 'flex', alignItems: 'center', gap: '3cqw', paddingLeft: '12cqw' } },
+                h('img', { src: 'assets/logomark-white.png', alt: '', style: { width: '15cqw', height: '15cqw', display: 'block' } }),
+                h('span', { style: { fontSize: '19cqw' } }, 'Leaders')
+              ),
+              h('span', { style: { fontSize: '19cqw' } }, 'Summit'),
+              h('span', { style: { fontSize: '6.6cqw', fontWeight: 500, letterSpacing: '-0.01em', alignSelf: 'flex-end', marginTop: '2cqw' } }, 'Never Stay Still')
+            ),
+            h('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4cqw' } },
+              h('span', { style: { fontFamily: sans, fontSize: '3.4cqw', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase' } }, '24–26 Nov 2026'),
+              h('span', { style: { background: '#fff', color: '#f04f51', borderRadius: '2.6cqw', padding: '1.6cqw 4cqw', fontFamily: "'Space Grotesk', system-ui, sans-serif", fontWeight: 700, fontSize: '10cqw', letterSpacing: '-0.02em', lineHeight: 1 } }, 'SHIF+')
+            )
+          )
+        ),
+        L ? null : cornerFills.map((c, i) => h('div', { key: 'c' + i, ref: (el) => { this.corners[i] = el; }, style: { position: 'absolute', left: 0, top: 0, background: c, zIndex: 3, transform: 'scale(0)' } })),
+        this.words.map((d, i) => h('span', { key: d.t, ref: (el) => { this.big[i] = el; }, style: {
+          position: 'absolute', left: d.x + '%', top: d.y + '%', zIndex: 4, willChange: 'transform,opacity', transform: 'translate(-50%,-50%) translateY(-120vh)', whiteSpace: 'nowrap', userSelect: 'none',
+          background: d.bg, color: d.fg, fontFamily: sans, fontWeight: 600, fontSize: 'clamp(44px,11vw,150px)', lineHeight: 1, letterSpacing: '-0.03em', padding: '0.04em 0.2em 0.12em'
+        } }, d.t))
+      );
+    }
+  };
+  static BLOCK = ['fuck', 'shit', 'bitch', 'asshole', 'anjing', 'bangsat', 'kontol', 'memek', 'babi', 'goblok', 'tolol', 'ngentot', 'jancuk'];
+  moveGallery(direction) {
+    const el = document.getElementById('gallery-strip');
+    if (!el || !el.firstElementChild) return;
+    const cs = getComputedStyle(el);
+    const gap = parseFloat(cs.columnGap || cs.gap) || 0;
+    const step = el.firstElementChild.getBoundingClientRect().width + gap;
+    const current = Math.round(el.scrollLeft / step);
+    const infiniteMobile = window.innerWidth < 640 && el.children.length >= 21;
+    const next = infiniteMobile
+      ? current + direction
+      : Math.max(0, Math.min(el.children.length - 1, current + direction));
+    el.scrollTo({ left: next * step, behavior: 'smooth' });
+  }
+  restoreWords(from = null) {
+    if (!this.story || this.story.props.mode === 'logo') return;
+    const records = this.state.wordRecords || [];
+    const signature = records.map(r => r.id).join(',');
+    if (this.story.sharedSignature === signature) return;
+    this.story.sharedSignature = signature;
+    // Retain the existing animated banner capacity and already-running animations.
+    const bannerRecords = records.slice(0, 12);
+    this.story.tags = this.story.tags.filter(t => !t.user || bannerRecords.some(r => r.id === t.recordId));
+    bannerRecords.slice().reverse().forEach(r => {
+      if (!this.story.tags.some(t => t.recordId === r.id)) this.story.addWord(r.word.toUpperCase(), r.id === records[0]?.id ? from : null, r.id);
+    });
+    this.story.forceUpdate();
+  }
+  static ALBUMS = [
+    { label: 'Day 1 album', date: '24 Nov', url: '' },
+    { label: 'Day 2 album', date: '25 Nov', url: '' },
+    { label: 'Day 3 album', date: '26 Nov', url: '' }
+  ];
+  static SPEAKERS = [
+    { name: 'Erastus Radjimin', title: 'Founder & CEO, Artotel Group', img: 'erastus-radjimin' },
+    { name: 'Christine Radjimin', title: 'Co-Founder & Chairman, Artotel Group', img: 'christine-radjimin' },
+    { name: 'Eduard R. Pangkerego', title: 'Chief Operating Officer, Artotel Group', img: 'eduard-pangkerego' },
+    { name: 'Yoris Sebastian', title: 'Founder & Creative Thinker of OMG Consulting', img: 'yoris-sebastian' },
+    { name: 'Gabriela Tudorina', title: 'Commercial Director, Artotel Group', img: 'gabriela-tudorina' },
+    { name: 'Jonathan Mokalu', title: 'Director of Business Development, Artotel Group', img: 'jonathan-mokalu' },
+    { name: 'Christy Megawati', title: 'Research & Intelligence Manager, Indonesia of Horwath HTL', img: 'christy-megawati' },
+    { name: 'Daniel Sunu', title: 'Director of Operations, Artotel Group', img: 'daniel-sunu' },
+    { name: 'Tamara Gondo', title: 'Sociopreneur & Founder and CEO of Liberty Society', img: 'tamara-gondo' },
+    { name: 'Harry Florentinus', title: 'Director of Human Resources, Artotel Group', img: 'harry-florentinus' },
+    { name: 'Anelies Praramadhani, B.Sc, M.A', title: 'Communication & Self Development Trainer', img: 'anelies-praramadhani', fit: 'contain' },
+    { name: 'Suwarna Dwipa', title: 'Group Finance Director, Artotel Group', img: 'suwarna-dwipa' },
+    { name: 'Kadafi Devayana', title: 'Marketing & Branding Consultant, Kadev Co.', img: 'kadafi-devayana' },
+    { name: 'Nastalia Nursanti', title: 'Director of Sales and Distribution, Artotel Group', img: 'nastalia-nursanti' },
+    { name: 'Ritz Chandra', title: 'AI & Robotics Consultant, Kadev Co.', img: 'ritz-chandra' },
+    { name: 'Rizdian Siregar', title: 'Director of Food & Beverage, Artotel Group', img: 'rizdian-siregar' },
+    { name: 'Caesar Indra', title: 'Founder & CEO of Wovenstack', img: 'caesar-indra' },
+    { name: 'Yulia Maria', title: 'Director of Marketing Communication, Artotel Group', img: 'yulia-maria' },
+    { name: 'Ojahan Oppusungu', title: 'Director of Technical & Technology, Artotel Group', img: 'ojahan-oppusunggu' },
+    { name: 'Doan Lingga', title: 'Co-Founder & CTO of Wovenstack', img: 'doan-lingga' },
+    { name: 'Indah Putri Kenedi', title: 'General Manager of Loyalty and Partnership, Artotel Group', img: 'indah-putri-kenedi' },
+    { name: 'Andri Meilani', title: 'Head of Creative, Artotel Group', img: 'andri-meilani', fit: 'contain' },
+    { name: 'Reza Baita', title: 'Director of Strategic Growth and Intelligence, Artotel Group', img: 'reza-baita' },
+    { name: 'Selvina Oktalena', title: 'Senior Operation Manager, Artotel Group', img: 'selvina-oktalena' },
+    { name: 'Kusnadi', title: 'General Manager of Artotel Group Regional Central Java', img: 'kusnadi' },
+    { name: 'Anton Susanto', title: 'General Manager of Artotel Group Regional West Java', img: 'anton-susanto' },
+    { name: 'Teddy Patrick', title: 'General Manager of Artotel Group Regional East Java', img: 'teddy-patrick' },
+  ];
+  static findSpeaker(p) {
+    const n = (p || '').replace(/^(Pak|Ibu|Bu|Mr\.?|Ms\.?)\s+/i, '').toLowerCase().trim();
+    if (!n) return null;
+    const first = n.split(/\s+/)[0];
+    return Component.SPEAKERS.find(x => x.name.toLowerCase() === n) || Component.SPEAKERS.find(x => { const xn = x.name.toLowerCase(); return xn.startsWith(n) || n.startsWith(xn) || xn.split(/\s+/)[0] === first; }) || null;
+  }
+  static titleFor(p) {
+    if (!p) return '';
+    const n = p.replace(/^(Pak|Ibu|Bu|Mr\.?|Ms\.?)\s+/i, '').toLowerCase();
+    const hit = Component.SPEAKERS.find(x => { const nm = x.name.toLowerCase(); return nm === n || nm.startsWith(n) || n.startsWith(nm.split(' ')[0] + ' ') && nm.split(' ')[1] && n.includes(nm.split(' ')[1]); });
+    return (hit && hit.title !== 'Title TBA' ? hit.title : null) || Component.TITLES[p] || 'Speaker title TBA';
+  }
+  static TITLES = {
+    'Pak Erastus Radjimin': 'Chief Executive Officer, Artotel Group',
+    'Pak Eduard Rudolf Pangkerego': 'Chief Operating Officer, Artotel Group',
+    'Yoris Sebastian': 'Founder & Creative Thinker, OMG Consulting'
+  };
+  static LOOKS = {
+    'dress-d1-last': { when: 'Day 1 · 24 November, 19.00', imgs: ['d1o-male.jpg','d1o-female.jpg','d1o-hijab.jpg'], items: ['Enamel pin AGLS 2026*', 'Plain black t-shirt', 'Dark blue jeans', 'White sneakers'] },
+    'dress-d2-first': { when: 'Day 2 · 25 November', imgs: ['d2o-male.jpg','d2o-female.jpg','d2o-hijab.jpg'], items: ['Lanyard AGLS 2026*', 'Reversible outerwear AGLS (jacket) - maroon side*', 'White sneakers', 'Khaki trousers', 'Plain white shirt (berkerah)'] },
+    'dress-d2-last': { when: 'Day 2 · 25 November', imgs: ['d2no-male.jpg','d2no-female.jpg','d2no-hijab.jpg'], items: ['Lanyard AGLS 2026*', 'Black Regular t-shirt AGLS 2026*', 'Black trousers', 'White sneakers'] },
+    'dress-d3-first': { when: 'Day 3 · 26 November', imgs: ['d3j-male.jpg','d3j-female.jpg','d3j-hijab.jpg'], groups: [
+      { label: 'Male', items: ['Jersey AGLS 2026*', 'Sport jogging pants - black', 'White sneakers'] },
+      { label: 'Female', items: ['Jersey AGLS 2026*', 'Sport flare leggings - black', 'Straight sweat pants - black (hijab)', 'White sneakers'] }] },
+    'dress-d3-i1': { when: 'Day 3 · 26 November', imgs: ['d3ro-male.jpg','d3ro-female.jpg','d3ro-hijab.jpg'], items: ['Maroon Work Shirt AGLS*', 'Lanyard AGLS 2026*', 'Black Trousers', 'White sneakers', 'Lanyard'] },
+    'dress-d3-last': { when: 'Day 3 · 26 November', imgs: ['d3-gala-v2'], alts: ['Male and female gala dinner looks'], groups: [
+      { label: 'Male', items: ['Reversible outerwear (jacket) AGLS 2026 - black side*', 'Long sleeve white fit shirt (berkerah)', 'Black tie', 'Formal/office black shoes'] },
+      { label: 'Female', items: ['Black evening dress', 'High heels'] }] }
+  };
+  static RUNDOWN = [
+    [
+      { s: '13:00', e: '19:00', t: "GM's Arrival – Registration & Check-in", loc: 'Meetspace A, 6th Floor' },
+      { s: '19:00', e: '21:00', t: 'Welcoming Dinner', loc: "De'Attic Rooftop", k: 'main' }
+    ],
+    [
+      { s: '08:30', e: '09:00', t: 'Registration and Coffee Break', k: 'break', loc: "Verdant Grand Ballroom" },
+      { s: '09:00', e: '09:25', t: 'Opening Ceremony', k: 'main', loc: "Verdant Grand Ballroom" },
+      { s: '09:25', e: '09:55', t: 'Message from CEO: SHIFT Happens', p: 'Erastus Radjimin', pt: 'Founder & CEO, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '09:55', e: '10:15', t: 'Opportunity Knocks, We Built the Door – Business Outlook 2027', p: 'Jonathan Mokalu · Daniel Sunu · Ojahan Oppusungu', pt: 'Director of Business Development, Artotel Group · Director of Operations, Artotel Group · Director of Technical & Technology, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '10:15', e: '11:15', t: 'BNI Total Solution for Artotel Group', p: 'BNI', pt: '', loc: "Verdant Grand Ballroom" },
+      { s: '11:20', e: '12:50', t: 'Lunch Break', k: 'break', loc: "Sitro All Day Dining" },
+      { s: '12:50', e: '13:30', t: 'Hospitality Outlook 2027', p: 'Christy Megawati', pt: 'Research & Intelligence Manager, Indonesia of Horwath HTL', loc: "Verdant Grand Ballroom" },
+      { s: '13:30', e: '15:00', t: 'Shifting To Open New Doors', p: 'Yoris Sebastian', loc: "Verdant Grand Ballroom" },
+      { s: '15:00', e: '15:45', t: 'Love as the Engine of Entrepreneurship', p: 'Tamara Gondo', pt: 'Sociopreneur & Founder and CEO of Liberty Society', loc: "Verdant Grand Ballroom" },
+      { s: '15:45', e: '16:00', t: 'Coffee Break', k: 'break', loc: "Verdant Grand Ballroom" },
+      { s: '16:00', e: '16:40', t: 'The "Pulse" of AI Performance in Hospitality', p: 'Caesar Indra · Doan Lingga · Reza Baita', pt: 'Founder & CEO of Wovenstack · Co-Founder & CTO of Wovenstack · Director of Strategic Growth and Intelligence, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '16:40', e: '17:40', t: 'Let Your Presence Speaks for Itself', p: 'Anelies Praramadhani', pt: 'Communication & Self Development Trainer', loc: "Verdant Grand Ballroom" },
+      { s: '17:40', e: '18:30', t: 'AI Engine for Content Optimization', p: 'Kadafi Devayana · Ritz Chandra', pt: 'Marketing & Branding Consultant, Kadev Co. · AI & Robotics Consultant, Kadev Co.', loc: "Verdant Grand Ballroom" },
+      { s: '19:40', e: '23:00', t: 'Casual Dinner & Networking Night', k: 'main', loc: "De'Attic Rooftop" }
+    ],
+    [
+      { s: '06:00', e: '07:00', t: 'Morning Stretch & Workout – Wanderlust Active Club', k: 'break', loc: "Sitro All Day Dining (Outdoor Area)" },
+      { s: '08:00', e: '08:45', t: 'Registration and Coffee Break', k: 'break', loc: "Verdant Grand Ballroom" },
+      { s: '08:45', e: '09:15', t: "It's Not You, It's the Culture", p: 'Harry Florentinus', pt: 'Director of Human Resources, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '09:15', e: '09:45', t: 'Checked In, Cashed Out?', p: 'Suwarna Dwipa', pt: 'Group Finance Director, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '09:45', e: '10:15', t: 'The Revenue Revolution', p: 'Nastalia Nursanti', pt: 'Director of Sales and Distribution, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '10:15', e: '10:35', t: 'Coffee Break', k: 'break', loc: "Verdant Grand Ballroom" },
+      { s: '10:40', e: '11:10', t: "What's Cooking?", p: 'Rizdian Siregar', pt: 'Director of Food & Beverage, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '11:10', e: '11:40', t: 'Head2Head – Regional Leaders on Stage', p: 'Kusnadi · Teddy Patrick · Anton Susanto · Selvina Oktalena', pt: 'General Manager of Artotel Group Regional Central Java · General Manager of Artotel Group Regional East Java · General Manager of Artotel Group Regional West Java · Senior Operation Manager, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '11:40', e: '13:10', t: 'Lunch', k: 'break', loc: "Sitro All Day Dining" },
+      { s: '13:15', e: '13:45', t: 'Art of Goodness', p: 'Yulia Maria · Ojahan Oppusungu', pt: 'Director of Marketing Communication, Artotel Group · Director of Technical & Technology, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '13:45', e: '14:15', t: 'Beyond Loyalty: Made for ANYONE', p: 'Gabriela Tudorina · Andri Meilani Kusim · Indah Putri Kenedi', pt: 'Commercial Director, Artotel Group · Head of Creative, Artotel Group · General Manager of Loyalty and Partnership, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '14:15', e: '14:45', t: 'The Shifting Formation', p: 'Daniel Sunu', pt: 'Director of Operations, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '14:45', e: '15:30', t: 'The Final Shift', p: 'Eduard Rudolf Pangkerego', pt: 'Chief Operating Officer, Artotel Group', loc: "Verdant Grand Ballroom" },
+      { s: '19:40', e: '02:00', t: 'Gala Dinner & Awarding Night', k: 'main', loc: "Verdant Grand Ballroom" }
+    ],
+    [
+      { t: 'Programme to be announced', k: 'break' }
+    ]
+  ];
+  state = { d: '00', h: '00', m: '00', s: '00' };
+  target = new Date('2026-11-24T09:00:00+07:00').getTime();
+  pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+  tick() {
+    const t = Math.floor(Math.max(0, this.target - Date.now()) / 1000);
+    this.setState({ d: this.pad(Math.floor(t / 86400)), h: this.pad(Math.floor(t / 3600) % 24), m: this.pad(Math.floor(t / 60) % 60), s: this.pad(t % 60) });
+  }
+  componentDidMount() {
+    this.tick(); this.timer = setInterval(() => this.tick(), 1000);
+    this.ptr = { x: 0, y: 0 }; this.cur = { x: 0, y: 0 };
+    this.onPtr = (e) => { this.ptr = { x: (e.clientX / window.innerWidth - 0.5) * -28, y: (e.clientY / window.innerHeight - 0.5) * -18 }; };
+    window.addEventListener('pointermove', this.onPtr, { passive: true });
+    this.onRes = () => { const m = window.innerWidth < 640; if (m !== !!this.state.mobile || window.innerWidth !== this.state.vpW || window.innerHeight !== this.state.vpH) this.setState({ mobile: m, vpW: window.innerWidth, vpH: window.innerHeight }); };
+    this.onRes(); window.addEventListener('resize', this.onRes);
+    this.syncT = setInterval(() => {
+      const a = this.vwTop, b = this.vwBot;
+      if (!a || !b || !a.isConnected || !b.isConnected) return;
+      if (a.paused || b.paused || a.readyState < 2 || b.readyState < 2) return;
+      const d = a.currentTime - b.currentTime;
+      if (Math.abs(d) > 0.08) b.currentTime = a.currentTime;
+      else if (Math.abs(d) > 0.015) b.playbackRate = d > 0 ? 1.06 : 0.94;
+      else b.playbackRate = 1;
+    }, 120);
+    this.onKey = (e) => { if (e.key === 'Escape' && this.state.dress) this.setState({ dress: null }); };
+    window.addEventListener('keydown', this.onKey);
+    this.wordsClient = window.createAGLSWordsClient(records => {
+      if (this.wordsDisposed) return;
+      const from = this.wordLaunchFrom;
+      this.setState({ wordRecords: records, words: records.slice().reverse().map(r => r.word), wordsStatus: '', wordsLoaded: true }, () => this.restoreWords(from));
+    }, message => { if (!this.wordsDisposed) this.setState({ wordsStatus: message }); });
+    this.setState({ wordsStatus: 'Loading shared words...' });
+    this.wordsClient.refresh();
+    const t0 = performance.now();
+    this.lastFrame = 0;
+    const run = (t) => {
+      this.lastFrame = performance.now();
+      try { this.frame(t, t0); } catch (err) { if (!this.__logged) { this.__logged = 1; console.error('hero loop', err); } }
+    };
+    const loop = (t) => { run(t); this.raf = requestAnimationFrame(loop); };
+    this.raf = requestAnimationFrame(loop);
+    this.fallback = setInterval(() => { if (performance.now() - this.lastFrame > 60) run(performance.now()); }, 33);
+  }
+  frame(t, t0) {
+    {
+      if (this.px) {
+        this.cur.x += (this.ptr.x - this.cur.x) * 0.05;
+        this.cur.y += (this.ptr.y - this.cur.y) * 0.05;
+        const k = (t - t0) / 1000;
+        const p = Math.min(1, window.scrollY / window.innerHeight);
+        const intro = Math.min(1, k / 1.6), ease = 1 - Math.pow(1 - intro, 3);
+        const C = [
+          { depth: 0.6, sx: -0.22, sy: 0.12, s0: 0.6, ph: 0 },
+          { depth: 1.4, sx: 0.30, sy: -0.18, s0: 0.3, ph: 1.7 },
+          { depth: 2.4, sx: 0.36, sy: 0.30, s0: 0, ph: 3.1 },
+          { depth: 3.2, sx: -0.50, sy: -0.40, s0: 0, ph: 4.4 }
+        ];
+        const W = window.innerWidth, H = window.innerHeight;
+        Array.from(this.px.children).forEach((el, i) => {
+          const c = C[i]; if (!c) return;
+          const fd = Math.min(c.depth, 1.4), fx = Math.sin(k / 9 + c.ph) * 18 * fd, fy = Math.cos(k / 11 + c.ph) * 14 * fd;
+          const x = this.cur.x * c.depth + fx + c.sx * W * p;
+          const y = this.cur.y * c.depth + fy + c.sy * H * p;
+          const sc = (c.s0 + (1 - c.s0) * ease) * (1 + Math.sin(k / 7 + c.ph) * 0.03) * (1 - p * 0.25);
+          el.style.transform = 'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + sc.toFixed(4) + ')';
+        });
+      }
+      if (this.mg) {
+        const k = (t - t0) / 1000;
+        const p = Math.min(1, window.scrollY / window.innerHeight);
+        const H = window.innerHeight;
+        const stacks = this.mg.children;
+        [0, 1].forEach((si) => {
+          const st = stacks[si]; if (!st) return;
+          const dir = si === 0 ? -1 : 1;
+          st.style.transform = 'translateX(-50%) translateX(' + (this.cur.x * 1.2).toFixed(1) + 'px) translateY(' + (dir * p * H * 0.45).toFixed(1) + 'px) rotateX(' + (this.cur.y * 0.9 * -dir).toFixed(2) + 'deg)';
+          Array.from(st.children).forEach((b, i) => {
+            const intro = Math.min(1, Math.max(0, (k - 0.15 * i - si * 0.4) / 0.9));
+            const e = 1 - Math.pow(1 - intro, 3);
+            const breathe = 0.82 + 0.18 * (0.5 + 0.5 * Math.sin(k * 1.1 - i * 0.6 + si * Math.PI));
+            b.style.transform = 'scaleX(' + (e * breathe).toFixed(4) + ')';
+            b.style.backgroundPosition = (((k * 18 + i * 9 + si * 50 + this.cur.x * 1.5) % 220 + 220) % 220).toFixed(1) + '% 0';
+          });
+        });
+      }
+      const pt = window.innerWidth < window.innerHeight;
+      if (pt !== !!this.state.portrait) this.setState({ portrait: pt });
+      const sc = window.scrollY > window.innerHeight * 0.85;
+      if (sc !== !!this.state.scrolled) this.setState({ scrolled: sc });
+      if (this.titleEl) {
+        const p = Math.min(1, window.scrollY / (window.innerHeight * 0.8));
+        this.titleEl.style.transform = 'translateY(' + (-p * 60).toFixed(1) + 'px)';
+        this.titleEl.style.opacity = String(1 - p * 0.9);
+      }
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    // On entering mobile layout, start at the middle copy so the carousel can loop in both directions.
+    if (!!this.state.mobile && !prevState.mobile) {
+      const el = document.getElementById('gallery-strip');
+      if (el && el.children.length >= 21 && el.firstElementChild) {
+        const cs = getComputedStyle(el);
+        const gap = parseFloat(cs.columnGap || cs.gap) || 0;
+        const step = el.firstElementChild.getBoundingClientRect().width + gap;
+        el.scrollLeft = step * 7;
+        if (this.state.galleryIndex !== 0) this.setState({ galleryIndex: 0 });
+      }
+    }
+  }
+  componentWillUnmount() { this.lineupCarousel?.dispose(); this.wordsDisposed = true; this.wordsClient?.dispose(); clearTimeout(this.pulseT); this.videoPlayback?.dispose(); window.removeEventListener('resize', this.onRes); window.removeEventListener('keydown', this.onKey); clearInterval(this.syncT); clearInterval(this.timer); clearInterval(this.fallback); cancelAnimationFrame(this.raf); window.removeEventListener('pointermove', this.onPtr); }
+  renderVals() {
+    const s = this.state;
+    const qp = this.qp || (this.qp = (() => { try { return new URLSearchParams(window.location.search); } catch (_) { return new URLSearchParams(''); } })());
+    const style = qp.get('hero') || (this.props.heroStyle ?? 'Divider video');
+    const div = style === 'Divider video';
+    const vNum = qp.get('v') || String(this.props.heroVideo ?? '1');
+    const showWordQ = qp.get('word');
+    const showWord = showWordQ != null ? showWordQ !== '0' : (this.props.showWordInput ?? true);
+    const split = div && !!s.mobile && vNum === '1';
+    const VIDS = { '1': 'uploads/dekstop%20mobile%20agls-9fac60bf.mp4', '2': 'uploads/AGLS_Presentation%20Divider%202.mp4', '3': 'uploads/AGLS_Presentation%20Divider%203.mp4' };
+    const cine = style !== 'Kinetic tags';
+    const MOB_Y = 0.22;
+    let mobBand = null;
+    if (div && s.mobile && s.vpW && s.vpH && s.vpH > s.vpW) {
+      const ratio = (this.vw && this.vw.videoWidth) ? this.vw.videoHeight / this.vw.videoWidth : 9 / 16;
+      const vh = s.vpW * ratio;
+      mobBand = { center: Math.round(MOB_Y * (s.vpH - vh) + vh / 2) };
+    }
+    const D = [
+      { label: 'Day 1', weekday: 'Tuesday', weekdayShort: 'Tue', num: '24', date: '24 Nov', bg: '#f04f51', fg: '#fff', theme: 'GM Arrival' },
+      { label: 'Day 2', weekday: 'Wednesday', weekdayShort: 'Wed', num: '25', date: '25 Nov', bg: '#a7dbd7', fg: '#341212', theme: 'Leaders Summit Day 1' },
+      { label: 'Day 3', weekday: 'Thursday', weekdayShort: 'Thu', num: '26', date: '26 Nov', bg: '#f04f51', fg: '#000', theme: 'GM Conference' }
+    ];
+    const dayIdx = s.day || 0;
+    const play = (key) => {
+      this.videoRefs = this.videoRefs || {};
+      return this.videoRefs[key] || (this.videoRefs[key] = (el) => {
+        if (!this.videoPlayback) this.videoPlayback = window.createAGLSVideoPlayback(next => {
+          if (Object.keys(next).some(k => this.state[k] !== next[k])) this.setState(next);
+        });
+        if (this[key] && this[key] !== el) this.videoPlayback.detach(this[key]);
+        this[key] = el;
+        if (el) this.videoPlayback.attach(el);
+      });
+    };
+    const theme = this.props.heroTheme ?? 'White';
+    const bg = cine ? '#000000' : ({ White: '#ffffff', Black: '#000000', Blue: '#341212' }[theme] || '#ffffff');
+    const ink = !cine && theme === 'White' ? '#000000' : '#ffffff';
+    const tags = [['#f04f51', '#fff'], ['#341212', '#fff'], ['#a7dbd7', '#341212'], ['#f04f51', '#000'], ['#a7dbd7', '#341212'], ['#85241a', '#fff']];
+    const rots = ['-4deg', '3deg', '-2deg', '5deg'];
+    return {
+      days: s.d, hours: s.h, minutes: s.m, seconds: s.s,
+      heroBg: bg, heroInk: ink,
+      videoNeedsPlay: !!s.videoNeedsPlay, videoButton: s.videoButton || 'Play video', videoMessage: s.videoMessage || '',
+      playHeroVideo: () => this.videoPlayback?.play(),
+      isMobile: !!s.mobile, notMobile: !s.mobile, spK343: s.mobile ? '34.3%' : '34.3%', spK297: s.mobile ? '29.7%' : '29.7%', spK480: s.mobile ? '48.0%' : '48.0%', spK406: s.mobile ? '40.6%' : '40.6%', spK352: s.mobile ? '35.2%' : '35.2%', spK532: s.mobile ? '53.2%' : '53.2%', spK549: s.mobile ? '54.9%' : '54.9%', spK344: s.mobile ? '34.4%' : '34.4%', spK337: s.mobile ? '33.7%' : '33.7%', spK392: s.mobile ? '39.2%' : '39.2%', spK500: s.mobile ? '50.0%' : '50.0%', spK192: s.mobile ? '19.2%' : '19.2%', spK423: s.mobile ? '42.3%' : '42.3%', spW: s.mobile ? '104px' : '150px', spH: s.mobile ? '52px' : '72px', spSepH: s.mobile ? '32px' : '44px', spGapX: s.mobile ? '20px' : '40px', spGapY: s.mobile ? '4px' : 'clamp(12px,2vw,24px)',
+      schedCols: s.vpW < 1000 ? 'minmax(0,1fr)' : '140px minmax(0,1.3fr) minmax(0,1fr) 200px', schedGap: s.vpW < 1000 ? '12px' : '24px',
+      schedB: (qp.get('sched') ? qp.get('sched') === 'b' : (this.props.scheduleStyle ?? 'Cards') === 'Cards'), schedA: !(qp.get('sched') ? qp.get('sched') === 'b' : (this.props.scheduleStyle ?? 'Cards') === 'Cards'),
+      formTop: style === 'Video + words' ? '50%' : 'auto',
+      formBottom: style === 'Video + words' ? 'auto' : (div ? (s.mobile ? '84px' : 'clamp(40px,7vh,72px)') : (s.mobile ? '172px' : 'clamp(96px,16vw,104px)')),
+      formTf: style === 'Video + words' ? 'translate(-50%,-50%)' : 'translateX(-50%)',
+      showWord,
+      wordLabelSize: s.mobile ? 'clamp(10px,2.6vw,12px)' : '13.2px',
+      vwSrc: div ? (VIDS[vNum] || VIDS['1']) : 'uploads/WEBSITE%20COUNTDOWN%20AGLS%202026-d826bba0.mp4',
+      vwBgDisplay: div ? 'none' : 'block',
+      vwPos: 'center',
+      vwFit: div ? 'cover' : (s.portrait ? 'cover' : 'contain'),
+      barPadB: s.mobile ? '84px' : 'clamp(14px,3vw,20px)',
+      footPadB: s.mobile ? '88px' : 'clamp(16px,4vw,24px)',
+      isStory: style === 'Scroll story' || style === 'Logo + words' || style === 'Video + words' || div, isLogo: style === 'Logo + words' || div,
+      isVideoWords: style === 'Video + words' || div, isWall: qp.get('wall') !== '0' && (style === 'Logo + words' || style === 'Video + words' || div) && showWord,
+      vwRef: play('vw'), vwBgRef: play('vwBg'),
+      vwTopRef: play('vwTop'), vwBotRef: play('vwBot'),
+      isSplit: split, notSplit: !split,
+      lockupScale: '1',
+      lockupW: split ? 'calc(min(48vw,calc((100dvh - 254px - 61.88vw) / 2.612)) * 1.32)' : s.mobile ? 'min(62vw,calc((100dvh - 250px) / 2.612 * 1.08))' : 'clamp(560px,62vw,960px)',
+      lockupSrc: s.mobile ? 'assets/agls-logo-mobile-v5.png' : 'assets/agls-logo-desktop-v5.png',
+      lockupTop: split ? 'calc((100dvh - 190px) / 2)' : div ? (s.mobile ? (showWord ? 'calc((100dvh - 124px) / 2)' : '50%') : (showWord ? '46%' : '50%')) : (s.mobile ? '36%' : '40%'),
+      heroH: style === 'Scroll story' ? '300vh' : '100dvh',
+      storyEl: (style === 'Scroll story' || style === 'Logo + words' || style === 'Video + words' || div) ? ((this.storyNodes = this.storyNodes || {})[style] || (this.storyNodes[style] = React.createElement(Component.Story, { key: style, mode: style === 'Scroll story' ? 'story' : 'logo', interactive: this.props.interactive ?? true, onReady: (st) => { this.story = st; this.__restored = false; this.restoreWords(); } }))) : null,
+      word: s.word || '', maxLen: 40, wordSaving: !!s.wordSaving, addLabel: s.wordSaving ? 'Saving...' : 'Add', wordsStatus: s.wordsStatus || '',
+      hasWords: (s.words || []).length > 0, noWords: !!s.wordsLoaded && !(s.words || []).length,
+      wordCount: (s.words || []).length + ((s.words || []).length === 1 ? ' word' : ' words'),
+      wallWords: (s.words || []).map((t, i, arr) => {
+        const fl = Component.FILLS[i % Component.FILLS.length];
+        const isNew = i === s.newest;
+        const sizes = ['clamp(20px,4vw,36px)', 'clamp(16px,3vw,26px)', 'clamp(26px,5.4vw,52px)', 'clamp(18px,3.4vw,30px)'];
+        return { t, bg: fl[0], fg: fl[1], rot: (((i * 37) % 9) - 4) + 'deg', size: isNew ? 'clamp(30px,6.4vw,64px)' : sizes[i % sizes.length],
+          scale: isNew && s.pulse ? '1.12' : '1', ring: isNew ? '0 0 0 3px #000, 0 0 0 5px #fff' : 'none' };
+      }).reverse(),
+      wordMsg: s.wordMsg || '', wordMsgColor: s.wordErr ? '#f9c9ca' : 'rgba(255,255,255,0.75)',
+      wordInputRef: (el) => { this.wordInput = el; },
+      onWord: (e) => this.setState({ word: e.target.value, wordMsg: '', wordErr: false }),
+      submitWord: async (e) => {
+        e.preventDefault();
+        if (this.state.wordSaving || !this.wordsClient) return;
+        const w = (this.state.word || '').normalize('NFKC').trim().replace(/\s+/gu, ' ');
+        if (!w || [...w].length > 40) { this.setState({ wordMsg: 'Enter a word or phrase of 1–40 characters.', wordErr: true }); return; }
+        this.wordLaunchFrom = null;
+        if (this.wordInput && this.story?.root.current) {
+          const r = this.wordInput.getBoundingClientRect(), rr = this.story.root.current.getBoundingClientRect();
+          this.wordLaunchFrom = { x: r.left + r.width / 2 - rr.left, y: r.top - rr.top };
+        }
+        this.setState({ wordSaving: true, wordMsg: 'Saving...', wordErr: false });
+        try {
+          await this.wordsClient.submit(w);
+          if (this.wordsDisposed) return;
+          this.setState({ word: '', newest: (this.state.words || []).length - 1, wordMsg: 'Thanks, your word has been saved for everyone.', wordErr: false, pulse: true });
+          if (this.wordInput) this.wordInput.blur();
+          const hs = (this.qp && this.qp.get('hero')) || (this.props.heroStyle ?? 'Divider video');
+          if (['Logo + words', 'Video + words', 'Divider video'].includes(hs)) {
+            const el = document.getElementById('words');
+            if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
+          }
+          clearTimeout(this.pulseT);
+          this.pulseT = setTimeout(() => { if (!this.wordsDisposed) this.setState({ pulse: false }); }, 1400);
+        } catch (error) {
+          if (!this.wordsDisposed) this.setState({ wordMsg: error.message || 'Could not save. Please try again.', wordErr: true });
+        } finally { this.wordLaunchFrom = null; if (!this.wordsDisposed) this.setState({ wordSaving: false }); }
+      },
+      isKinetic: style === 'Kinetic tags', isCinematic: style === 'Supergraphic', isFilm: style === 'Film', isMotion: style === 'Motion graphic',
+      secColor: style === 'Supergraphic' ? '#a7dbd7' : '#f04f51',
+      filmFit: s.portrait ? 'cover' : 'contain',
+      filmRef: play('film'), filmBgRef: play('filmBg'),
+      mgRef: (el) => { this.mg = el; },
+      bars: ['46%', '62%', '78%', '90%', '100%'].map((w) => ({ w })),
+      navInk: !cine && theme === 'White' && !s.scrolled ? '#000' : '#fff',
+      navBg: s.scrolled ? 'rgba(52,18,18,0.85)' : 'transparent',
+      parallaxRef: (el) => { this.px = el; },
+      titleRef: (el) => { this.titleEl = el; },
+      barBg: 'transparent',
+      barBlur: 'none',
+      heroField: React.createElement(Component.Field, { ink, interactive: this.props.interactive ?? true }),
+      speakers: Array.from({ length: Component.SPEAKERS.length * 3 }, (_, k) => { const i = k % Component.SPEAKERS.length; return ({
+        clone: k < Component.SPEAKERS.length || k >= Component.SPEAKERS.length * 2 ? 'true' : 'false', slotId: 'speaker-v2-' + (k + 1), num: String(i + 1).padStart(2, '0'),
+        fit: (Component.SPEAKERS[i] || {}).fit || 'cover',
+        name: (Component.SPEAKERS[i] || {}).name || 'Speaker Name',
+        title: (Component.SPEAKERS[i] || {}).title || 'Title, Company',
+        src: (Component.SPEAKERS[i] || {}).img ? 'assets/speakers/' + Component.SPEAKERS[i].img + '.png' : '',
+        cardBg: (Component.SPEAKERS[i] || {}).img ? 'transparent' : '#141414',
+        bg: tags[i % tags.length][0], fg: tags[i % tags.length][1], rot: rots[i % rots.length]
+      }); }),
+      days4: D.map((d, i) => ({ ...d, pick: () => this.setState({ day: i }), sel: i === dayIdx ? 'true' : 'false',
+        bdNow: i === dayIdx ? d.bg : 'rgba(255,255,255,0.25)', bgNow: i === dayIdx ? d.bg : 'transparent', fgNow: i === dayIdx ? d.fg : '#fff' })),
+      cur: D[dayIdx],
+      sessions: (Component.RUNDOWN[dayIdx] || []).map((r, i, arr) => {
+        const brk = r.k === 'break', main = r.k === 'main';
+        const hasSpeaker = !!r.p && !brk && !r.np;
+        const slot = 'dress-d' + (dayIdx + 1) + '-' + (i === 0 ? 'first' : i === arr.length - 1 ? 'last' : 'i' + i);
+        const hasDress = ((i === 0 || i === arr.length - 1) && !/Arrival/i.test(r.t)) || !!Component.LOOKS[slot];
+        const hasDeck = hasSpeaker && !!r.deck;
+        const dayLabel = D[dayIdx].label + ' · ' + D[dayIdx].date;
+        return { range: r.s ? r.s + (r.e ? ' – ' + r.e : '') : 'TBA', isBreak: brk, isCard: !brk, hasTag: !brk, speakerLabel: (r.p || '').includes(' · ') ? 'Speakers' : 'Speaker', tag: main ? 'Highlight' : (hasSpeaker ? 'Talk' : 'Programme'), tagBg: main ? '#a7dbd7' : (hasSpeaker ? '#f04f51' : 'rgba(255,255,255,0.12)'), tagFg: main ? '#341212' : '#fff',
+          time: r.s || 'TBA', end: r.e ? '– ' + r.e : '', title: r.t, speaker: r.p || '',
+          deckUrl: r.deck || '', loc: r.loc || '', hasLoc: !!r.loc,
+          openDress: () => this.setState({ dress: { title: r.t, day: dayLabel,  slot } }),
+          speakerTitle: r.pt !== undefined ? r.pt : Component.titleFor(r.p),
+          people: (() => { const ns = (r.p || '').split(' · '); const ts = r.pt !== undefined ? r.pt.split(' · ') : null;
+            return ns.map((n, j) => { const t = ts ? (ts.length === ns.length ? ts[j] : ts[Math.min(j, ts.length - 1)]) : Component.titleFor(n); const sp = Component.findSpeaker(n); const LOGO = { BNI: 'assets/sp/bni.png' }; const logo = LOGO[n] || ''; const img = !logo && sp && sp.img ? 'assets/speakers/' + sp.img + '.png' : ''; const ini = n.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase(); return { name: n, title: t || '', hasTitle: !!t, img, hasImg: !!img, logo, isLogo: !!logo, notLogo: !logo, noImg: !img && !logo, initials: ini }; }); })(),
+          hasSpeaker, hasDress, hasDeck, hasActions: hasDress || hasDeck,
+          timeColor: r.s ? '#fff' : 'rgba(255,255,255,0.45)',
+          color: brk ? 'rgba(255,255,255,0.6)' : '#fff', weight: brk ? 500 : 600,
+          size: main ? 'clamp(18px,4.2vw,24px)' : (brk ? 'clamp(14px,3.4vw,16px)' : 'clamp(16px,3.8vw,20px)') };
+      }),
+      dressOpen: !!s.dress, dressTitle: s.dress ? s.dress.title : '', dressDay: s.dress ? (Component.LOOKS[s.dress.slot] ? Component.LOOKS[s.dress.slot].when : s.dress.day) : '', dressHasLook: !!(s.dress && Component.LOOKS[s.dress.slot]), dressNoLook: !(s.dress && Component.LOOKS[s.dress.slot]),
+      dressImgs: (() => { const L = s.dress && Component.LOOKS[s.dress.slot]; if (!L) return []; const one = L.imgs.length === 1; return L.imgs.map((k, j) => ({ src: 'assets/dresscode/' + k + (k.includes('.') ? '' : '.png'), alt: L.alts ? L.alts[j] : ['Male', 'Female', 'Female with hijab'][j] + ' dress code look', ratio: one ? '478/786' : '2/3' })); })(),
+      dressCols: s.dress && Component.LOOKS[s.dress.slot] && Component.LOOKS[s.dress.slot].imgs.length === 1 ? 'minmax(0,320px)' : 'repeat(3,minmax(0,1fr))',
+      dressGroups: (() => { const L = s.dress && Component.LOOKS[s.dress.slot]; return !L ? [] : (L.groups || [{ label: 'Male / Female', items: L.items }]); })(), dressSlot: s.dress ? s.dress.slot : 'dress-none',
+      closeDress: () => this.setState({ dress: null }),
+      stopProp: (e) => e.stopPropagation(),
+      contacts: [
+        { topic: 'General', bg: '#f04f51', fg: '#fff', rot: '-2deg' },
+        { topic: 'Travel & Accommodation', bg: '#a7dbd7', fg: '#341212', rot: '2deg' },
+        { topic: 'Programme', bg: '#f04f51', fg: '#000', rot: '-3deg' }
+      ],
+      lineupRef: this.lineupRef || (this.lineupRef = el => {
+        this.lineupCarousel?.dispose();
+        this.lineupCarousel = el ? window.createAGLSLineupCarousel(el, Component.SPEAKERS.length) : null;
+      }),
+      lineupPrev: () => this.lineupCarousel?.move(-1),
+      lineupNext: () => this.lineupCarousel?.move(1),
+      galleryPrev: () => this.moveGallery(-1), galleryNext: () => this.moveGallery(1),
+      galleryAtStart: false, galleryAtEnd: false,
+      galleryPosition: ((s.galleryIndex || 0) + 1) + ' / 7',
+      galleryScroll: (event) => {
+        const el = event.currentTarget;
+        if (!el.firstElementChild) return;
+        const cs = getComputedStyle(el);
+        const gap = parseFloat(cs.columnGap || cs.gap) || 0;
+        const step = el.firstElementChild.getBoundingClientRect().width + gap;
+        let index = Math.round(el.scrollLeft / step);
+        if (window.innerWidth < 640 && el.children.length >= 21) {
+          const setWidth = step * 7;
+          // Rebase by one complete seven-photo set. The visible photo stays identical,
+          // while the scroll position remains in the middle copy for endless movement.
+          if (index < 7) {
+            el.scrollLeft += setWidth;
+            index = Math.round(el.scrollLeft / step);
+          } else if (index >= 14) {
+            el.scrollLeft -= setWidth;
+            index = Math.round(el.scrollLeft / step);
+          }
+          index = ((index % 7) + 7) % 7;
+        } else {
+          index = Math.max(0, Math.min(6, index));
+        }
+        if (index !== (this.state.galleryIndex || 0)) this.setState({ galleryIndex: index });
+      },
+      gallery: Array.from({ length: s.mobile ? 21 : 7 }, (_, idx) => {
+        const n = (idx % 7) + 1;
+        const cycle = Math.floor(idx / 7);
+        return {
+          slotId: 'agls-gallery-' + cycle + '-' + n,
+          src: 'assets/gallery/web-0' + n + '.jpg?v=2',
+          rowSpan: !s.mobile && idx === 0 ? 'span 2' : 'span 1',
+          colSpan: !s.mobile && (idx === 0 || idx === 3 || idx === 6) ? 'span 2' : 'span 1'
+        };
+      }),
+      albums: Component.ALBUMS.map((a) => ({ label: a.label, note: a.url ? 'Open Google Drive album' : 'Available ' + a.date,
+        href: a.url || '#gallery', disabled: a.url ? 'false' : 'true', pe: a.url ? 'auto' : 'none',
+        border: a.url ? '#f04f51' : 'rgba(255,255,255,0.25)', bg: a.url ? '#f04f51' : 'transparent', fg: a.url ? '#fff' : 'rgba(255,255,255,0.6)', arrow: a.url ? '↗' : '' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

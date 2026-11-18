@@ -1,0 +1,20 @@
+/* Overlays — dialog.tsx, tooltip.tsx, dropdown-menu.tsx */
+.ag-dialog__overlay{position:fixed;inset:0;z-index:50;background:rgb(0 0 0 / .8)}
+.ag-dialog{position:fixed;left:50%;top:50%;z-index:51;transform:translate(-50%,-50%);display:grid;gap:1rem;width:100%;max-width:32rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--background);padding:1.5rem;box-shadow:var(--shadow-lg);animation:ag-pop var(--duration-modal) var(--ease-out)}
+.ag-dialog__header{display:flex;flex-direction:column;gap:.375rem}
+.ag-dialog__title{font-family:var(--font-ui);font-size:1.125rem;font-weight:600;line-height:1;letter-spacing:-.01em}
+.ag-dialog__description{font-size:.875rem;color:var(--muted-foreground)}
+.ag-dialog__footer{display:flex;justify-content:flex-end;gap:.5rem}
+.ag-dialog__close{position:absolute;right:1rem;top:1rem;display:flex;border:0;background:transparent;color:var(--muted-foreground);border-radius:var(--radius-sm);cursor:pointer;opacity:.7;transition:opacity var(--duration-fast)}
+.ag-dialog__close:hover{opacity:1}
+
+.ag-tooltip{position:relative;display:inline-flex}
+.ag-tooltip__content{position:absolute;bottom:calc(100% + .375rem);left:50%;transform:translateX(-50%);z-index:60;white-space:nowrap;border-radius:var(--radius-md);background:var(--foreground);color:var(--background);padding:.25rem .625rem;font-size:.75rem;box-shadow:var(--shadow-md);pointer-events:none}
+
+.ag-menu{min-width:12rem;padding:.25rem;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--popover);color:var(--popover-foreground);box-shadow:var(--shadow-md)}
+.ag-menu__item{display:flex;align-items:center;gap:.5rem;width:100%;border:0;background:transparent;border-radius:var(--radius-sm);padding:.375rem .5rem;font-size:.875rem;color:inherit;text-align:left;cursor:pointer;transition:var(--transition-colors)}
+.ag-menu__item:hover{background:var(--accent);color:var(--accent-foreground);text-decoration:none}
+.ag-menu__item--destructive{color:var(--destructive)}
+.ag-menu__item svg{width:.875rem;height:.875rem}
+.ag-menu__label{padding:.375rem .5rem;font-size:.75rem;font-weight:600;color:var(--muted-foreground)}
+.ag-menu__separator{height:1px;margin:.25rem -.25rem;background:var(--border)}

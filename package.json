@@ -1,0 +1,16 @@
+{
+  "name": "agls-teaser",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --ip 127.0.0.1 --port 8788",
+    "check": "node --test && wrangler deploy --dry-run",
+    "deploy": "node scripts/check-d1-config.js && wrangler deploy",
+    "db:local": "wrangler d1 migrations apply agls-words --local",
+    "db:remote": "node scripts/check-d1-config.js && wrangler d1 migrations apply agls-words --remote"
+  },
+  "devDependencies": {
+    "wrangler": "4.159.0"
+  }
+}

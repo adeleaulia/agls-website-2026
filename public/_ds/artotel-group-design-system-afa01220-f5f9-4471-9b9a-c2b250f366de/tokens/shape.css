@@ -1,0 +1,30 @@
+/* Radii, borders, shadows.
+   Redist Desk radius base = 0.4rem; Team Desk = 0.625rem; Commercial Hub = 12px.
+   Brand artefacts are square-cornered except the circle motif, which is a true
+   circle (the logomark and the "maximum four circles" supergraphic, p.65). */
+:root{
+  --radius:0.4rem;                       /* ag-redist globals.css */
+  --radius-sm:calc(var(--radius) - 4px);
+  --radius-md:calc(var(--radius) - 2px);
+  --radius-lg:var(--radius);
+  --radius-xl:calc(var(--radius) + 4px); /* shadcn Card = rounded-xl */
+  --radius-full:9999px;
+  --radius-brand:0;                      /* brand collateral: hard corners */
+  --radius-circle:50%;                   /* logomark / supergraphic circles */
+
+  --border-width:1px;
+  --border-color:var(--border);
+  --border-partner-rule:1px;             /* 1pt grey rule between partner logos (p.47) */
+
+  /* shadcn elevation, verbatim */
+  --shadow-sm:0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow:0 1px 3px 0 rgb(0 0 0 / 0.1),0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md:0 4px 6px -1px rgb(0 0 0 / 0.1),0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:0 10px 15px -3px rgb(0 0 0 / 0.1),0 4px 6px -4px rgb(0 0 0 / 0.1);
+  /* Commercial Hub elevation */
+  --shadow-hub:0 1px 2px rgba(16,18,22,.04),0 4px 16px rgba(16,18,22,.06);
+  --shadow-hub-lg:0 8px 40px rgba(16,18,22,.16);
+
+  --focus-ring:0 0 0 1px var(--ring);
+  --focus-ring-hub:0 0 0 3px rgba(200,16,46,.12);
+}
